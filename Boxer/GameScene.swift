@@ -11,75 +11,113 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    var viewController: GameViewController!
+    var player = SKSpriteNode()
+    var enemy = SKSpriteNode()
+    var enemyHpBar = SKShapeNode()
+    var playerHpBar = SKShapeNode()
+    
+    var fightOver = Bool()
+    
+    var Boxer = Fighter()
+    var Opponent = Fighter()
+    
+    var touch = UITouch()
     
     override func didMove(to view: SKView) {
+        //set up scene here
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        view.isMultipleTouchEnabled = true
+        self.backgroundColor = SKColor.white
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        Opponent.setOriginalHp(hp: 150)
+        Opponent.setDefense(defense: 50)
+        Opponent.setStrength(strength: 50)
+        Opponent.setName(name: "Kragen")
+        Boxer.setOriginalHp(hp: 150)
+        Boxer.setDefense(defense: 50)
+        Boxer.setStrength(strength: 50)
+        Boxer.setName(name: "Kuufnar")
+
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+        enemyHpBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+30, y: (self.frame.height/2)-90, width: self.frame.width-60, height: 60))
+        enemyHpBar.fillColor = SKColor.blue
+        enemyHpBar.zPosition = 9
+        
+        playerHpBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+30, y: -(self.frame.height/2)+235, width: self.frame.width-60, height: 60))
+        playerHpBar.fillColor = SKColor.green
+        playerHpBar.zPosition = 9
+        
+        addChild(enemyHpBar)
+        addChild(playerHpBar)
+        
+        //fight against AI
+        fight(player: Boxer, enemy: Opponent)
+        
     }
     
     
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
+    func heal(amount: Int, fighter: Fighter){
+
     }
     
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
+    func fight(player: Fighter, enemy: Fighter){
+       // while(!fightOver){}
+        
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
+        let touch = touches.first!
+        let location = touch.location(in: self)
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-    }
+        //node underneath touch location
+        let node = self.atPoint(CGPoint(x: location.x, y: location.y))
+       
+        //if not touching empty space
+        if(node.name != nil){
+        
+            //touching right arrow
+            if(node.name! == "rightKey"){
+                print("rightKey")
+                enemyHpBar.position.x = enemyHpBar.position.x + 50
+            }// if rightKey
+            
+            //touching left arrow
+            if(node.name! == "leftKey"){
+                print("leftKey")
+                enemyHpBar.position.x = enemyHpBar.position.x - 50
+            }// if leftKey
+            
+            //touching punch button
+            if(node.name! == "punchKey"){
+                print("punchKey")
+            }// if rightKey
+            
+            if(node.name! == "damageEnemy"){
+                print("damageEnemy")
+                //damage(amount: 15, fighter: Opponent)
+            }
+            
+            if(node.name! == "damagePlayer"){
+                print("damagePlayer")
+                //damage(amount: 15, fighter: Boxer)
+            }
+            
+        } // if !nil
+    
+    } // touchesBegan
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+
     }
     
     

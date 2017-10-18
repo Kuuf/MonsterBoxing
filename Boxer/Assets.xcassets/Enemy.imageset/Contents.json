@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Spaceship.png",
+      "filename" : "Enemy.png",
       "scale" : "1x"
     },
     {

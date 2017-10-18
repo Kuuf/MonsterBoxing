@@ -17,6 +17,7 @@
 		69F9E0E71F6A34E700A31C73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69F9E0E51F6A34E700A31C73 /* LaunchScreen.storyboard */; };
 		69F9E0F21F6A34E700A31C73 /* BoxerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9E0F11F6A34E700A31C73 /* BoxerTests.swift */; };
 		69F9E0FD1F6A34E700A31C73 /* BoxerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9E0FC1F6A34E700A31C73 /* BoxerUITests.swift */; };
+		69FEA8171F95586600724204 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FEA8161F95586600724204 /* Fighter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		69F9E0F81F6A34E700A31C73 /* BoxerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BoxerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F9E0FC1F6A34E700A31C73 /* BoxerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxerUITests.swift; sourceTree = "<group>"; };
 		69F9E0FE1F6A34E700A31C73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69FEA8161F95586600724204 /* Fighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				69F9E0D81F6A34E700A31C73 /* GameScene.sks */,
 				69F9E0DA1F6A34E700A31C73 /* Actions.sks */,
 				69F9E0DC1F6A34E700A31C73 /* GameScene.swift */,
+				69FEA8161F95586600724204 /* Fighter.swift */,
 				69F9E0DE1F6A34E700A31C73 /* GameViewController.swift */,
 				69F9E0E01F6A34E700A31C73 /* Main.storyboard */,
 				69F9E0E31F6A34E700A31C73 /* Assets.xcassets */,
@@ -202,6 +205,7 @@
 				TargetAttributes = {
 					69F9E0D21F6A34E700A31C73 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 65ZMTUG33C;
 						ProvisioningStyle = Automatic;
 					};
 					69F9E0EC1F6A34E700A31C73 = {
@@ -216,7 +220,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 69F9E0CE1F6A34E700A31C73 /* Build configuration list for PBXProject "Boxer" */;
+			buildConfigurationList = 69F9E0CE1F6A34E700A31C73 /* Build configuration list for PBXProject "Monster Boxing" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -271,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69F9E0DD1F6A34E700A31C73 /* GameScene.swift in Sources */,
+				69FEA8171F95586600724204 /* Fighter.swift in Sources */,
 				69F9E0DF1F6A34E700A31C73 /* GameViewController.swift in Sources */,
 				69F9E0D71F6A34E700A31C73 /* AppDelegate.swift in Sources */,
 			);
@@ -424,9 +429,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 65ZMTUG33C;
 				INFOPLIST_FILE = Boxer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jacob.Boxer;
+				PRODUCT_BUNDLE_IDENTIFIER = jacob.MonsterBoxing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -436,9 +442,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 65ZMTUG33C;
 				INFOPLIST_FILE = Boxer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = jacob.Boxer;
+				PRODUCT_BUNDLE_IDENTIFIER = jacob.MonsterBoxing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -501,7 +508,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		69F9E0CE1F6A34E700A31C73 /* Build configuration list for PBXProject "Boxer" */ = {
+		69F9E0CE1F6A34E700A31C73 /* Build configuration list for PBXProject "Monster Boxing" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				69F9E0FF1F6A34E700A31C73 /* Debug */,
@@ -517,6 +524,7 @@
 				69F9E1031F6A34E700A31C73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69F9E1041F6A34E700A31C73 /* Build configuration list for PBXNativeTarget "BoxerTests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +533,7 @@
 				69F9E1061F6A34E700A31C73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69F9E1071F6A34E700A31C73 /* Build configuration list for PBXNativeTarget "BoxerUITests" */ = {
 			isa = XCConfigurationList;
@@ -533,6 +542,7 @@
 				69F9E1091F6A34E700A31C73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

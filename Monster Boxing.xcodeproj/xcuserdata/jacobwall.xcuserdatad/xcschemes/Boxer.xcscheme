@@ -17,7 +17,7 @@
                BlueprintIdentifier = "69F9E0D21F6A34E700A31C73"
                BuildableName = "Boxer.app"
                BlueprintName = "Boxer"
-               ReferencedContainer = "container:Boxer.xcodeproj">
+               ReferencedContainer = "container:Monster Boxing.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "69F9E0EC1F6A34E700A31C73"
                BuildableName = "BoxerTests.xctest"
                BlueprintName = "BoxerTests"
-               ReferencedContainer = "container:Boxer.xcodeproj">
+               ReferencedContainer = "container:Monster Boxing.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "69F9E0F71F6A34E700A31C73"
                BuildableName = "BoxerUITests.xctest"
                BlueprintName = "BoxerUITests"
-               ReferencedContainer = "container:Boxer.xcodeproj">
+               ReferencedContainer = "container:Monster Boxing.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,7 +55,7 @@
             BlueprintIdentifier = "69F9E0D21F6A34E700A31C73"
             BuildableName = "Boxer.app"
             BlueprintName = "Boxer"
-            ReferencedContainer = "container:Boxer.xcodeproj">
+            ReferencedContainer = "container:Monster Boxing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -78,7 +78,7 @@
             BlueprintIdentifier = "69F9E0D21F6A34E700A31C73"
             BuildableName = "Boxer.app"
             BlueprintName = "Boxer"
-            ReferencedContainer = "container:Boxer.xcodeproj">
+            ReferencedContainer = "container:Monster Boxing.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -97,7 +97,7 @@
             BlueprintIdentifier = "69F9E0D21F6A34E700A31C73"
             BuildableName = "Boxer.app"
             BlueprintName = "Boxer"
-            ReferencedContainer = "container:Boxer.xcodeproj">
+            ReferencedContainer = "container:Monster Boxing.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
