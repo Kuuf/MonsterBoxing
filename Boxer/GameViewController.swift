@@ -44,7 +44,7 @@ class GameViewController: UIViewController {
     var Opponent = Fighter()
     var dodged = Bool()
     
-    var dodgeCount = Int()
+    var punchHoldTime = Int()
 
     var playerHpBar = SKShapeNode()
     var opponentHpBar = SKShapeNode()
@@ -59,6 +59,7 @@ class GameViewController: UIViewController {
             let skView = self.view as! SKView
             skView.showsFPS = true
             skView.showsNodeCount = true
+            
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             skView.ignoresSiblingOrder = true
@@ -158,7 +159,7 @@ class GameViewController: UIViewController {
     func opponentPunchHold(sender: UIButton){
         Opponent.setStance(stance: "punching")
         self.opponentStance.text = Opponent.getStance()
-        damage(attacker: Opponent, damaged: Boxer)
+        damage(attacker: Opponent, damaged: Boxer, punchHoldTime: 1)
     }
 
     func opponentPunchRelease(sender: UIButton){
@@ -203,33 +204,42 @@ class GameViewController: UIViewController {
         }
     }
     
-    func punchPress(sender: UIButton){
-        Boxer.setStance(stance: "punching")
-        self.playerStance.text = Boxer.getStance()
-        
-        damage(attacker: Boxer, damaged: Opponent)
-    }
-    
     func punchHold(sender: UIButton){
         Boxer.setStance(stance: "punching")
         self.playerStance.text = Boxer.getStance()
-        damage(attacker: Boxer, damaged: Opponent)
+       
     }
     
     //disabling temporarily while testing functionality
     
     func arrowRelease(sender: UIButton){
-       /*
+       
         if(!pressingRight && !pressingLeft){
             self.playerPosition.text = "middle"
         }
-        */
+        
+    }
+    
+    func enablePunchKey(){
+        self.punchKey.isEnabled = true
     }
     
     // **************************************************
  
     
     func punchRelease(sender: UIButton){
+        var coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
+        print("coolDownTime", coolDownTime)
+        // sets cooldown time for punches depending on speed of puncher
+
+        
+        //sets buildup time before punches
+        let punchBufferTime = DispatchTime.now() + DispatchTimeInterval.seconds(Int(coolDownTime))
+        DispatchQueue.main.asyncAfter(deadline: punchBufferTime){
+            self.damage(attacker: self.Boxer, damaged: self.Opponent, punchHoldTime: 1)
+        }
+        
+        
         if(!pressingRight && !pressingLeft){
             Boxer.setStance(stance: "vulnerable")
             self.playerStance.text = Boxer.getStance()
@@ -237,6 +247,7 @@ class GameViewController: UIViewController {
         if(pressingRight && pressingLeft){
             Boxer.setStance(stance: "blocking")
         }
+        
     }
 
     //unused for now, keeping just in case
@@ -250,7 +261,14 @@ class GameViewController: UIViewController {
     
     // universal damage method, gets called in GameScene as well
     // return damage from this method to GameScene to modify HP bars
-    func damage(attacker: Fighter, damaged: Fighter) -> Int{
+    func damage(attacker: Fighter, damaged: Fighter, punchHoldTime: Float) -> Int{
+        /***** IMPORTANT VV*******VV IMPORTANT VV*******VV IMPORTANT ******* V
+         
+        add in a punch variable that takes in a monster's respective situaiton,
+         whether it be a super move or any other condition, and implements that
+         variable into damage calculation
+ 
+        ****** IMPORTANT^^ ******* ^^IMPORTANT ******* IMPORTANT *******^^^ */
         
         // attacker punching left while opponent on right
         if(attacker.getPosition() == "left" && damaged.getPosition() == "right"){
@@ -265,8 +283,6 @@ class GameViewController: UIViewController {
         }
         
         if(dodged){
-            dodgeCount += 1
-            print("dodged", dodgeCount)
             return 0
         }
         else if(damaged.getStance() == "blocking"){
@@ -296,7 +312,7 @@ class GameViewController: UIViewController {
     // ****************************************************************
             return (attacker.getStrength()/damaged.defense)*20
         }
-    }
+    } // damage()
     
     
     override var shouldAutorotate: Bool {

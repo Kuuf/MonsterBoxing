@@ -34,9 +34,12 @@ class GameScene: SKScene {
         Opponent.setDefense(defense: 50)
         Opponent.setStrength(strength: 50)
         Opponent.setName(name: "Kragen")
+        
+        
         Boxer.setOriginalHp(hp: 150)
         Boxer.setDefense(defense: 50)
         Boxer.setStrength(strength: 50)
+        Boxer.setSpd(speed: 50)
         Boxer.setName(name: "Kuufnar")
 
         
