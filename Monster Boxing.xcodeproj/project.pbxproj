@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		699FCD451F97F31C00737727 /* Fight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699FCD441F97F31C00737727 /* Fight.swift */; };
 		69F9E0D71F6A34E700A31C73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F9E0D61F6A34E700A31C73 /* AppDelegate.swift */; };
 		69F9E0D91F6A34E700A31C73 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 69F9E0D81F6A34E700A31C73 /* GameScene.sks */; };
 		69F9E0DB1F6A34E700A31C73 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 69F9E0DA1F6A34E700A31C73 /* Actions.sks */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		699FCD441F97F31C00737727 /* Fight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fight.swift; sourceTree = "<group>"; };
 		69F9E0D31F6A34E700A31C73 /* Boxer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Boxer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69F9E0D61F6A34E700A31C73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69F9E0D81F6A34E700A31C73 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				69F9E0D81F6A34E700A31C73 /* GameScene.sks */,
 				69F9E0DA1F6A34E700A31C73 /* Actions.sks */,
 				69F9E0DC1F6A34E700A31C73 /* GameScene.swift */,
+				699FCD441F97F31C00737727 /* Fight.swift */,
 				69FEA8161F95586600724204 /* Fighter.swift */,
 				69F9E0DE1F6A34E700A31C73 /* GameViewController.swift */,
 				69F9E0E01F6A34E700A31C73 /* Main.storyboard */,
@@ -278,6 +281,7 @@
 				69FEA8171F95586600724204 /* Fighter.swift in Sources */,
 				69F9E0DF1F6A34E700A31C73 /* GameViewController.swift in Sources */,
 				69F9E0D71F6A34E700A31C73 /* AppDelegate.swift in Sources */,
+				699FCD451F97F31C00737727 /* Fight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,11 +18,11 @@ class GameScene: SKScene {
     var playerHpBar = SKShapeNode()
     
     var fightOver = Bool()
+    var touch = UITouch()
     
     var Boxer = Fighter()
     var Opponent = Fighter()
-    
-    var touch = UITouch()
+    var Match = Fight()
     
     override func didMove(to view: SKView) {
         //set up scene here
@@ -30,18 +30,10 @@ class GameScene: SKScene {
         view.isMultipleTouchEnabled = true
         self.backgroundColor = SKColor.white
         
-        Opponent.setOriginalHp(hp: 150)
-        Opponent.setDefense(defense: 50)
-        Opponent.setStrength(strength: 50)
-        Opponent.setName(name: "Kragen")
+        Boxer = Fighter(name: "Kuufnar", hp: 150, defense: 50, strength: 50, speed: 75)
+        Opponent = Fighter(name: "Kragen", hp: 300, defense: 100, strength: 20, speed: 20)
+        Match = Fight(player: Boxer, enemy: Opponent)
         
-        
-        Boxer.setOriginalHp(hp: 150)
-        Boxer.setDefense(defense: 50)
-        Boxer.setStrength(strength: 50)
-        Boxer.setSpd(speed: 50)
-        Boxer.setName(name: "Kuufnar")
-
         
         enemyHpBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+30, y: (self.frame.height/2)-90, width: self.frame.width-60, height: 60))
         enemyHpBar.fillColor = SKColor.blue

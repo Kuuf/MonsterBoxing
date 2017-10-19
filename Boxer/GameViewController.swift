@@ -40,8 +40,10 @@ class GameViewController: UIViewController {
     
     var pressingLeft = Bool()
     var pressingRight = Bool()
+    
     var Boxer = Fighter()
     var Opponent = Fighter()
+    var Match = Fight()
     var dodged = Bool()
     
     var punchHoldTime = Int()
@@ -69,6 +71,7 @@ class GameViewController: UIViewController {
             
             skView.presentScene(scene)
             
+            Match = scene.Match
             Boxer = scene.Boxer
             Opponent = scene.Opponent
             playerHpBar = scene.playerHpBar
@@ -119,7 +122,7 @@ class GameViewController: UIViewController {
         opponentPosition.text = Opponent.getPosition()
         Opponent.setStance(stance: "vulnerable")
         opponentStance.text = Opponent.getStance()
-        Opponent.setHp(hp: 150)
+        Opponent.setHp(hp: Opponent.getOriginalHp())
         opponentHp.text = String(Opponent.getHp())
     }
     
@@ -128,7 +131,7 @@ class GameViewController: UIViewController {
         playerPosition.text = Boxer.getPosition()
         Boxer.setStance(stance: "vulnerable")
         playerStance.text = Boxer.getStance()
-        Boxer.setHp(hp: 150)
+        Boxer.setHp(hp: Boxer.getOriginalHp())
         playerHp.text = String(Boxer.getHp())
     }
     
@@ -227,7 +230,7 @@ class GameViewController: UIViewController {
     // **************************************************
  
     
-    func punchRelease(sender: UIButton){
+    /*func punchRelease(sender: UIButton){
         var coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
         print("coolDownTime", coolDownTime)
         // sets cooldown time for punches depending on speed of puncher
@@ -248,6 +251,18 @@ class GameViewController: UIViewController {
             Boxer.setStance(stance: "blocking")
         }
         
+    } */
+    func punchRelease(sender: UIButton){
+        //disables button for coolDownTime
+        let coolDownTime = Float(100.0/Float(Boxer.getSpeed()))
+        self.punchKey.isEnabled = false
+        Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
+       
+        //does actual punching action
+        Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime)
+        
+        Boxer.setStance(stance: "vulnerable")
+       
     }
 
     //unused for now, keeping just in case
@@ -261,15 +276,9 @@ class GameViewController: UIViewController {
     
     // universal damage method, gets called in GameScene as well
     // return damage from this method to GameScene to modify HP bars
+   
     func damage(attacker: Fighter, damaged: Fighter, punchHoldTime: Float) -> Int{
-        /***** IMPORTANT VV*******VV IMPORTANT VV*******VV IMPORTANT ******* V
-         
-        add in a punch variable that takes in a monster's respective situaiton,
-         whether it be a super move or any other condition, and implements that
-         variable into damage calculation
- 
-        ****** IMPORTANT^^ ******* ^^IMPORTANT ******* IMPORTANT *******^^^ */
-        
+
         // attacker punching left while opponent on right
         if(attacker.getPosition() == "left" && damaged.getPosition() == "right"){
             dodged = true

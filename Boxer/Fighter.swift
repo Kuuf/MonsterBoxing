@@ -9,21 +9,28 @@
 import Foundation
 import SpriteKit
 
-class Fighter : SKSpriteNode{
+class Fighter{
     
-    var nickName = String()
+    var name = String()
+    var originalHp = Int()
     var hp = Int()
     var defense = Int()
     var strength = Int()
-    var spd = Int() // speed
-    var recoveryTime = Int()
+    var speed = Int() // speed
     var stance = String()
-    var pos = String() // position
-    var originalHp = Int()
+    var position = String() // position
     
-    func setOriginalHp(hp: Int){
-        originalHp = hp
-        setHp(hp: hp)
+    init(name: String, hp: Int, defense: Int, strength: Int, speed: Int){
+        self.hp = hp
+        self.name = name
+        self.originalHp = hp
+        self.defense = defense
+        self.strength = strength
+        self.speed = speed
+    }
+
+    required init() {
+        
     }
     
     func getOriginalHp() -> Int{
@@ -31,7 +38,7 @@ class Fighter : SKSpriteNode{
     }
     
     func getName() -> String{
-        return nickName
+        return name
     }
     
     func getHp() -> Int{
@@ -43,11 +50,11 @@ class Fighter : SKSpriteNode{
     }
     
     func getSpeed() -> Int{
-        return spd
+        return speed
     }
     
     func setName(name: String){
-        nickName = name
+        self.name = name
     }
     
     func setHp(hp: Int){
@@ -59,17 +66,9 @@ class Fighter : SKSpriteNode{
     }
     
     func setSpd(speed: Int){
-        spd = speed
+        self.speed = speed
     }
-    
-    func setRecoveryTime(recoveryTime: Int){
-        self.recoveryTime = recoveryTime
-    }
-    
-    func getRecoveryTime() -> Int{
-        return recoveryTime
-    }
-    
+
     func setDefense(defense: Int){
         self.defense = defense
     }
@@ -77,13 +76,6 @@ class Fighter : SKSpriteNode{
     func getDefense() -> Int{
         return defense
     }
-    
-    /*
-     stances:
-     punching
-     blocking
-     vulnerable
-     */
     
     func setStance(stance: String){
         self.stance = stance
@@ -93,6 +85,15 @@ class Fighter : SKSpriteNode{
         return stance
     }
     
+    func setPosition(position: String){
+        self.position = position
+    }
+
+    func getPosition() -> String{
+        return position
+    }
+  
+    
     /*
      position:
      left
@@ -100,15 +101,10 @@ class Fighter : SKSpriteNode{
      center
      */
     
-    func setPosition(position: String){
-        pos = position
-    }
-
-    func getPosition() -> String{
-        return pos
-    }
-  
-  
-    
-    
+    /*
+     stances:
+     punching
+     blocking
+     vulnerable
+     */
 }
