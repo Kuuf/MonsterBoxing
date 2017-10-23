@@ -27,9 +27,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var opponentPosition: UILabel!
     @IBOutlet weak var opponentStance: UILabel!
     @IBOutlet weak var opponentHp: UILabel!
-   
-    @IBOutlet weak var playerBlock: UIButton!
-    
+       
     @IBOutlet weak var opponentLeft: UIButton!
     @IBOutlet weak var opponentRight: UIButton!
     @IBOutlet weak var opponentPunch: UIButton!
@@ -40,28 +38,28 @@ class GameViewController: UIViewController {
     
     var pressingLeft = Bool()
     var pressingRight = Bool()
-    
     var Boxer = Fighter()
     var Opponent = Fighter()
     var Match = Fight()
     var dodged = Bool()
-    
     var punchHoldTime = Int()
-
     var playerHpBar = SKShapeNode()
     var opponentHpBar = SKShapeNode()
+    var canMove = Bool()
+    var directionLastPressed = String()
     
     override func viewDidLoad() {
+        canMove = true
         super.viewDidLoad()
+        view.isMultipleTouchEnabled = true
         if let scene = GameScene(fileNamed:"GameScene") {
             scene.viewController = self
             
             // Configure the view.
-            
             let skView = self.view as! SKView
             skView.showsFPS = true
             skView.showsNodeCount = true
-            
+            skView.isMultipleTouchEnabled = true
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             skView.ignoresSiblingOrder = true
@@ -80,13 +78,13 @@ class GameViewController: UIViewController {
         }
         
         // registering different touches for leftKey
-        leftKey.addTarget(self, action: #selector(GameViewController.arrowRelease), for: UIControlEvents.touchUpInside)
-        leftKey.addTarget(self, action: #selector(GameViewController.arrowRelease), for: UIControlEvents.touchUpOutside)
+        leftKey.addTarget(self, action: #selector(GameViewController.leftArrowRelease), for: UIControlEvents.touchUpInside)
+        leftKey.addTarget(self, action: #selector(GameViewController.leftArrowRelease), for: UIControlEvents.touchUpOutside)
         leftKey.addTarget(self, action: #selector(GameViewController.leftHold), for: UIControlEvents.touchDown)
         
         // registering different touches for rightKey
-        rightKey.addTarget(self, action: #selector(GameViewController.arrowRelease), for: UIControlEvents.touchUpInside)
-        rightKey.addTarget(self, action: #selector(GameViewController.arrowRelease), for: UIControlEvents.touchUpOutside)
+        rightKey.addTarget(self, action: #selector(GameViewController.rightArrowRelease), for: UIControlEvents.touchUpInside)
+        rightKey.addTarget(self, action: #selector(GameViewController.rightArrowRelease), for: UIControlEvents.touchUpOutside)
         rightKey.addTarget(self, action: #selector(GameViewController.rightHold), for: UIControlEvents.touchDown)
         
         // registering different touches for punchKey
@@ -109,9 +107,6 @@ class GameViewController: UIViewController {
         resetOpponent.addTarget(self, action: #selector(GameViewController.resetOpp), for: UIControlEvents.touchDown)
         resetPlayer.addTarget(self, action: #selector(GameViewController.resetBoxer), for: UIControlEvents.touchDown)
       
-        //blocking
-        opponentBlock.addTarget(self, action: #selector(GameViewController.oppBlock), for: UIControlEvents.touchDown)
-        playerBlock.addTarget(self, action: #selector(GameViewController.boxerBlock), for: UIControlEvents.touchDown)
         
 //****   //     ****// ***********************************
     }
@@ -138,11 +133,6 @@ class GameViewController: UIViewController {
     func oppBlock(sender: UIButton){
         Opponent.setStance(stance: "blocking")
         opponentStance.text = Opponent.getStance()
-    }
-    
-    func boxerBlock(sender: UIButton){
-        Boxer.setStance(stance: "blocking")
-        playerStance.text = Boxer.getStance()
     }
     
     func opponentLeftHold(sender: UIButton){
@@ -187,99 +177,116 @@ class GameViewController: UIViewController {
     // adding function to buttons' touching scenarios
     
     func leftHold(sender: UIButton){
-        if(pressingRight){
-            Boxer.setPosition(position: "middle")
-            self.playerPosition.text = Boxer.getPosition()
-            Boxer.setStance(stance: "blocking")
-            self.playerStance.text = Boxer.getStance()
-        }
-        else{
-            Boxer.setPosition(position: "left")
-            self.playerPosition.text = Boxer.getPosition()
+        if(canMove){
+            directionLastPressed = "left"
+            pressingLeft = true
+            if(pressingRight){
+                Boxer.setPosition(position: "middle")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "blocking")
+                self.playerStance.text = Boxer.getStance()
+            }
+            else{
+                Boxer.setPosition(position: "left")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
         }
     }
-    
-    func rightPress(sender: UIButton){
-        if(!pressingLeft){
-            Boxer.setPosition(position: "right")
-            self.playerPosition.text = Boxer.getPosition()
-        }
-    }
-    
+
     func rightHold(sender: UIButton){
-        if(!pressingLeft){
-            Boxer.setPosition(position: "right")
-            self.playerPosition.text = Boxer.getPosition()
+        directionLastPressed = "right"
+        if(canMove){
+            pressingRight = true
+            if(pressingLeft){
+                Boxer.setPosition(position: "middle")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "blocking")
+                self.playerStance.text = Boxer.getStance()
+            }else{
+                Boxer.setPosition(position: "right")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
         }
     }
     
     func punchHold(sender: UIButton){
         Boxer.setStance(stance: "punching")
         self.playerStance.text = Boxer.getStance()
-       
+        canMove = false
     }
     
-    //disabling temporarily while testing functionality
-    
-    func arrowRelease(sender: UIButton){
-       
-        if(!pressingRight && !pressingLeft){
-            self.playerPosition.text = "middle"
+    func leftArrowRelease(sender: UIButton?){
+        if(canMove){
+            pressingLeft = false
+            if(!pressingRight && !pressingLeft){
+                Boxer.setPosition(position: "middle")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
+            if(pressingRight){
+                Boxer.setPosition(position: "right")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
         }
-        
+    }
+    
+    func rightArrowRelease(sender: UIButton?){
+        if(canMove){
+            pressingRight = false
+            if(!pressingRight && !pressingLeft){
+                Boxer.setPosition(position: "middle")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
+            if(pressingLeft){
+                Boxer.setPosition(position: "left")
+                self.playerPosition.text = Boxer.getPosition()
+                Boxer.setStance(stance: "vulnerable")
+                self.playerStance.text = Boxer.getStance()
+            }
+        }
     }
     
     func enablePunchKey(){
         self.punchKey.isEnabled = true
+        Boxer.setStance(stance: "vulnerable")
+        playerStance.text = Boxer.getStance()
+        canMove = true
+       
+        /*
+         if you release an arrow during the punch's cooldown time,
+         canMove is set to false, so the arrowRelease function doesn't
+         get a chance to set the player's position back to normal
+         These 2 methods handle that scenario
+         */
+        if(directionLastPressed == "right"){
+            rightArrowRelease(sender: nil)
+        }
+        
+        if(directionLastPressed == "left"){
+            leftArrowRelease(sender: nil)
+        }
     }
     
-    // **************************************************
- 
-    
-    /*func punchRelease(sender: UIButton){
-        var coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
-        print("coolDownTime", coolDownTime)
-        // sets cooldown time for punches depending on speed of puncher
-
-        
-        //sets buildup time before punches
-        let punchBufferTime = DispatchTime.now() + DispatchTimeInterval.seconds(Int(coolDownTime))
-        DispatchQueue.main.asyncAfter(deadline: punchBufferTime){
-            self.damage(attacker: self.Boxer, damaged: self.Opponent, punchHoldTime: 1)
-        }
-        
-        
-        if(!pressingRight && !pressingLeft){
-            Boxer.setStance(stance: "vulnerable")
-            self.playerStance.text = Boxer.getStance()
-        }
-        if(pressingRight && pressingLeft){
-            Boxer.setStance(stance: "blocking")
-        }
-        
-    } */
     func punchRelease(sender: UIButton){
         //disables button for coolDownTime
-        let coolDownTime = Float(100.0/Float(Boxer.getSpeed()))
+        let coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
         self.punchKey.isEnabled = false
         Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
        
         //does actual punching action
         Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime)
         
-        Boxer.setStance(stance: "vulnerable")
-       
     }
 
-    //unused for now, keeping just in case
-    func changeStance(fighter: Fighter, stance: String){
-        fighter.setStance(stance: stance)
-    }
-    
-    func changePosition(fighter: Fighter, position: String){
-        fighter.setPosition(position: position)
-    }
-    
     // universal damage method, gets called in GameScene as well
     // return damage from this method to GameScene to modify HP bars
    

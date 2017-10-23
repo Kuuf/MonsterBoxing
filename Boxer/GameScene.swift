@@ -26,7 +26,6 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         //set up scene here
-        
         view.isMultipleTouchEnabled = true
         self.backgroundColor = SKColor.white
         
@@ -47,7 +46,6 @@ class GameScene: SKScene {
         addChild(playerHpBar)
         
         //fight against AI
-        fight(player: Boxer, enemy: Opponent)
         
     }
     
@@ -55,23 +53,19 @@ class GameScene: SKScene {
     func heal(amount: Int, fighter: Fighter){
 
     }
-    
-    func fight(player: Fighter, enemy: Fighter){
-       // while(!fightOver){}
-        
-        
-    }
+
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
         
+
         //node underneath touch location
         let node = self.atPoint(CGPoint(x: location.x, y: location.y))
-       
+            
         //if not touching empty space
         if(node.name != nil){
-        
+            
             //touching right arrow
             if(node.name! == "rightKey"){
                 print("rightKey")
@@ -100,7 +94,7 @@ class GameScene: SKScene {
             }
             
         } // if !nil
-    
+        
     } // touchesBegan
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
