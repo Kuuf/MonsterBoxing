@@ -146,7 +146,13 @@ class GameViewController: UIViewController {
     }
     
     func opponentLeftHold(sender: UIButton){
-        if(!pressingRight){
+        
+        if(pressingRight){
+            Opponent.setPosition(position: "middle")
+            self.opponentPosition.text = Opponent.getPosition()
+            Opponent.setStance(stance: "blocking")
+            self.opponentStance.text = Opponent.getStance()
+        }else{
             Opponent.setPosition(position: "left")
             self.opponentPosition.text = Opponent.getPosition()
         }
@@ -179,15 +185,15 @@ class GameViewController: UIViewController {
 
 
     // adding function to buttons' touching scenarios
-    func leftPress(sender: UIButton){
-        if(!pressingRight){
-            Boxer.setPosition(position: "left")
-            self.playerPosition.text = Boxer.getPosition()
-        }
-    }
     
     func leftHold(sender: UIButton){
-        if(!pressingRight){
+        if(pressingRight){
+            Boxer.setPosition(position: "middle")
+            self.playerPosition.text = Boxer.getPosition()
+            Boxer.setStance(stance: "blocking")
+            self.playerStance.text = Boxer.getStance()
+        }
+        else{
             Boxer.setPosition(position: "left")
             self.playerPosition.text = Boxer.getPosition()
         }
