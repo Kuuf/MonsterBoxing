@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 
 class Fight{
-    
+    var viewController: GameViewController!
     
     var coolDownTime = Float()
     var holdTime = Float()
@@ -20,6 +20,7 @@ class Fight{
     
     var player = Fighter()
     var enemy = Fighter()
+
     
     init (player: Fighter, enemy: Fighter){
         self.player = player
@@ -31,8 +32,8 @@ class Fight{
     }
     
     func punch(attacker: Fighter, defender: Fighter, isMonsterMove: Bool, coolDownTime: Float) -> Float{
-
-        let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(200)))
+        
+        let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(300)))
         self.isMonsterMove = isMonsterMove
         
         // attacker punching left while opponent on right
@@ -65,12 +66,12 @@ class Fight{
             
             
             DispatchQueue.main.asyncAfter(deadline: bufferTime){
-                defender.setHp(hp: Int(newHp))
-                attacker.setStance(stance: "punching")
+                defender.setHp(hp: newHp)
+                attacker.setStance(stance: "vulnerable")
+                print("punch over")
             }
             return Float(attacker.getStrength())/Float(defender.defense)*Float(20.0)
             
-     
         }
     }
     

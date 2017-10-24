@@ -12,15 +12,15 @@ import SpriteKit
 class Fighter{
     
     var name = String()
-    var originalHp = Int()
-    var hp = Int()
-    var defense = Int()
-    var strength = Int()
-    var speed = Int() // speed
+    var originalHp = Float()
+    var hp = Float()
+    var defense = Float()
+    var strength = Float()
+    var speed = Float() // speed
     var stance = String()
     var position = String() // position
     
-    init(name: String, hp: Int, defense: Int, strength: Int, speed: Int){
+    init(name: String, hp: Float, defense: Float, strength: Float, speed: Float){
         self.hp = hp
         self.name = name
         self.originalHp = hp
@@ -33,7 +33,7 @@ class Fighter{
         
     }
     
-    func getOriginalHp() -> Int{
+    func getOriginalHp() -> Float{
         return originalHp
     }
     
@@ -41,15 +41,15 @@ class Fighter{
         return name
     }
     
-    func getHp() -> Int{
+    func getHp() -> Float{
         return hp
     }
     
-    func getStrength() -> Int{
+    func getStrength() -> Float{
         return strength
     }
     
-    func getSpeed() -> Int{
+    func getSpeed() -> Float{
         return speed
     }
     
@@ -57,23 +57,23 @@ class Fighter{
         self.name = name
     }
     
-    func setHp(hp: Int){
+    func setHp(hp: Float){
         self.hp = hp
     }
     
-    func setStrength(strength: Int){
+    func setStrength(strength: Float){
         self.strength = strength
     }
     
-    func setSpd(speed: Int){
+    func setSpd(speed: Float){
         self.speed = speed
     }
 
-    func setDefense(defense: Int){
+    func setDefense(defense: Float){
         self.defense = defense
     }
     
-    func getDefense() -> Int{
+    func getDefense() -> Float{
         return defense
     }
     

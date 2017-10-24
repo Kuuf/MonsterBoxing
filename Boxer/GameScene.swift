@@ -23,7 +23,7 @@ class GameScene: SKScene {
     var Boxer = Fighter()
     var Opponent = Fighter()
     var Match = Fight()
-    
+
     override func didMove(to view: SKView) {
         //set up scene here
         view.isMultipleTouchEnabled = true
@@ -46,14 +46,18 @@ class GameScene: SKScene {
         addChild(playerHpBar)
         
         //fight against AI
+        //fight(player: Boxer, ai: Opponent)
+    }
+    
+    func fight(player: Fighter, ai: Fighter){
+        var attackCounter: Int = 0
+        while(attackCounter < 10){
+            var random: Int = Int(arc4random_uniform(4))
+            
+        }
         
+       // Match.punch(attacker: ai, defender: Fighter, isMonsterMove: <#T##Bool#>, coolDownTime: <#T##Float#>)
     }
-    
-    
-    func heal(amount: Int, fighter: Fighter){
-
-    }
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
