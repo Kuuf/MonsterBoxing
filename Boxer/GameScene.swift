@@ -23,6 +23,8 @@ class GameScene: SKScene {
     var Boxer = Fighter()
     var Opponent = Fighter()
     var Match = Fight()
+    var random = UInt32()
+    var gameStarted = Bool()
 
     override func didMove(to view: SKView) {
         //set up scene here
@@ -46,20 +48,35 @@ class GameScene: SKScene {
         addChild(playerHpBar)
         
         //fight against AI
-        //fight(player: Boxer, ai: Opponent)
     }
     
     func fight(player: Fighter, ai: Fighter){
-        var attackCounter: Int = 0
-        while(attackCounter < 10){
-            var random: Int = Int(arc4random_uniform(4))
-            
+        let coolDownTime = Float(50.0/Float(ai.getSpeed()))/2
+        let aiPunch = SKAction.run{
+            print("AI punch")
+
+            self.random = arc4random_uniform(4)
+            let damage = self.Match.punch(attacker: ai, defender: player, isMonsterMove: false, coolDownTime: coolDownTime)
+            self.viewController.modifyUI(attacker: ai, defender: player, input: damage)            
         }
+        let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let coolDown = SKAction.wait(forDuration: TimeInterval(coolDownTime))
+        let randomDelay = SKAction.wait(forDuration: 3, withRange: 2)
+        let punch = SKAction.sequence([buildUp, aiPunch, coolDown, randomDelay])
+        let punchRepeatForever = SKAction.repeatForever(punch)
+        self.run(punchRepeatForever)
         
-       // Match.punch(attacker: ai, defender: Fighter, isMonsterMove: <#T##Bool#>, coolDownTime: <#T##Float#>)
+        
+        
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if(!gameStarted){
+            fight(player: Boxer, ai: Opponent)
+        }
+        gameStarted = true
+
         let touch = touches.first!
         let location = touch.location(in: self)
         

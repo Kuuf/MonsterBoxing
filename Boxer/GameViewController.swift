@@ -48,6 +48,8 @@ class GameViewController: UIViewController {
     var canMove = Bool()
     var directionLastPressed = String()
     var damage = Float()
+    var coolDownTime = Float()
+    var sceneNode = SKNode()
     
     override func viewDidLoad() {
         canMove = true
@@ -60,7 +62,7 @@ class GameViewController: UIViewController {
             skView.showsFPS = true
             skView.showsNodeCount = true
             skView.isMultipleTouchEnabled = true
-            
+            sceneNode = scene
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             skView.ignoresSiblingOrder = true
             
@@ -68,13 +70,13 @@ class GameViewController: UIViewController {
             scene.scaleMode = .aspectFill
             
             skView.presentScene(scene)
-            
             Match = scene.Match
             Boxer = scene.Boxer
             Opponent = scene.Opponent
             playerHpBar = scene.playerHpBar
             opponentHpBar = scene.enemyHpBar
-          
+            coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
+
         }
         
         // registering different touches for leftKey
@@ -107,8 +109,10 @@ class GameViewController: UIViewController {
         resetOpponent.addTarget(self, action: #selector(GameViewController.resetOpp), for: UIControlEvents.touchDown)
         resetPlayer.addTarget(self, action: #selector(GameViewController.resetBoxer), for: UIControlEvents.touchDown)
       
-        
 //****   //     ****// ***********************************
+        
+        
+        
     }
     //temporary opponent functions to test damage and scenario functionality
     
@@ -178,10 +182,10 @@ class GameViewController: UIViewController {
 
     // adding function to buttons' touching scenarios
     
-    func leftHold(sender: UIButton){
+    func leftHold(sender: UIButton?){
+        pressingLeft = true
         if(canMove){
             directionLastPressed = "left"
-            pressingLeft = true
             if(pressingRight){
                 Boxer.setPosition(position: "middle")
                 self.playerPosition.text = Boxer.getPosition()
@@ -199,26 +203,32 @@ class GameViewController: UIViewController {
     
     func leftArrowRelease(sender: UIButton?){
         pressingLeft = false
-        if(canMove){
-            if(!pressingRight && !pressingLeft){
-                Boxer.setPosition(position: "middle")
-                self.playerPosition.text = Boxer.getPosition()
-                Boxer.setStance(stance: "vulnerable")
-                self.playerStance.text = Boxer.getStance()
-            }
-            if(pressingRight){
-                Boxer.setPosition(position: "right")
-                self.playerPosition.text = Boxer.getPosition()
-                Boxer.setStance(stance: "vulnerable")
-                self.playerStance.text = Boxer.getStance()
+        let boxerMoving = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let boxerDoneMoving = SKAction.run{
+            if(self.canMove){
+                if(!self.pressingRight && !self.pressingLeft){
+                    self.Boxer.setPosition(position: "middle")
+                    self.playerPosition.text = self.Boxer.getPosition()
+                    self.Boxer.setStance(stance: "vulnerable")
+                    self.playerStance.text = self.Boxer.getStance()
+                }
+                if(self.pressingRight){
+                    self.Boxer.setPosition(position: "right")
+                    self.playerPosition.text = self.Boxer.getPosition()
+                    self.Boxer.setStance(stance: "vulnerable")
+                    self.playerStance.text = self.Boxer.getStance()
+                }
             }
         }
+        // creates a cooldown to go to center after moving left or right
+        let movementSequence = SKAction.sequence([boxerMoving, boxerDoneMoving])
+        sceneNode.run(movementSequence)
     }
     
-    func rightHold(sender: UIButton){
+    func rightHold(sender: UIButton?){
+        pressingRight = true
         if(canMove){
             directionLastPressed = "right"
-            pressingRight = true
             if(pressingLeft){
                 Boxer.setPosition(position: "middle")
                 self.playerPosition.text = Boxer.getPosition()
@@ -235,34 +245,36 @@ class GameViewController: UIViewController {
     
     func rightArrowRelease(sender: UIButton?){
         pressingRight = false
-        if(canMove){
-            if(!pressingRight && !pressingLeft){
-                Boxer.setPosition(position: "middle")
-                self.playerPosition.text = Boxer.getPosition()
-                //  Boxer.setStance(stance: "vulnerable")
-                self.playerStance.text = Boxer.getStance()
-            }
-            if(pressingLeft){
-                Boxer.setPosition(position: "left")
-                self.playerPosition.text = Boxer.getPosition()
-                Boxer.setStance(stance: "vulnerable")
-                self.playerStance.text = Boxer.getStance()
+        let boxerMoving = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let boxerDoneMoving = SKAction.run{
+            if(self.canMove){
+                if(!self.pressingRight && !self.pressingLeft){
+                    self.Boxer.setPosition(position: "middle")
+                    self.playerPosition.text = self.Boxer.getPosition()
+                    self.Boxer.setStance(stance: "vulnerable")
+                    self.playerStance.text = self.Boxer.getStance()
+                }
+                if(self.pressingLeft){
+                    self.Boxer.setPosition(position: "left")
+                    self.playerPosition.text = self.Boxer.getPosition()
+                    self.Boxer.setStance(stance: "vulnerable")
+                    self.playerStance.text = self.Boxer.getStance()
+                }
             }
         }
+        // creates a cooldown to go to center after moving left or right
+        let movementSequence = SKAction.sequence([boxerMoving, boxerDoneMoving])
+        sceneNode.run(movementSequence)
     }
     
     func punchHold(sender: UIButton){
-        let coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
         Boxer.setStance(stance: "punching")
         self.playerStance.text = Boxer.getStance()
         canMove = false
     }
     
-    
     func punchRelease(sender: UIButton){
-        print("punch beginning")
         //disables button for coolDownTime
-        let coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
         self.punchKey.isEnabled = false
         Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
         
@@ -285,16 +297,26 @@ class GameViewController: UIViewController {
          get a chance to set the player's position back to normal
          These 2 methods handle that scenario
          */
+        if(pressingLeft){
+            leftHold(sender: nil)
+            print("pressing left after punch ends")
+        }
+        else if(pressingRight){
+            rightHold(sender: nil)
+            print("pressing right after punch ends")
+
+        }
         if(!pressingLeft && !pressingRight){
             if(directionLastPressed == "right"){
                 rightArrowRelease(sender: nil)
             }
             
             if(directionLastPressed == "left"){
-                print("left arrow release")
                 leftArrowRelease(sender: nil)
             }
         }
+       
+        
     }
     
 
@@ -335,19 +357,24 @@ class GameViewController: UIViewController {
     } // damage()
     */
     //uses info returned from Fight.swift's Punch() method to change UI
+   
     func modifyUI(attacker: Fighter, defender: Fighter, input: Float){
         let newHp = defender.getHp() - (attacker.getStrength()/defender.defense)*80
         let oldHp = defender.getHp()
+        //if the defender is the player
         if(attacker.getName() != "Kuufnar"){
-            playerHpBar.position.x = playerHpBar.position.x - (playerHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+            if(Boxer.getStance() != "blocking"){
+                playerHpBar.position.x = playerHpBar.position.x - (playerHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+            }
         }else{
             opponentHpBar.position.x = opponentHpBar.position.x - (opponentHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+            if(Opponent.getStance() != "blocking"){
+                opponentHpBar.position.x = opponentHpBar.position.x - (opponentHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+            }
         }
-        
-        
         //^^ modify the 4 according to the dimensions of the container for the hpbar
         // play around with it until the bar depleats completely when hp = 0
-        print("new Bar Position:", playerHpBar.position.x)
+        //print("new Bar Position:", playerHpBar.position.x)
 
     }
     

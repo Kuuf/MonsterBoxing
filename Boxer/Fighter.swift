@@ -27,6 +27,8 @@ class Fighter{
         self.defense = defense
         self.strength = strength
         self.speed = speed
+        self.stance = "vulnerable"
+        self.position = "middle"
     }
 
     required init() {

@@ -64,11 +64,14 @@ class Fight{
             let newHp = Float(defender.getHp()) - (Float(attacker.getStrength())/Float(defender.defense)*20)
             let oldHp = defender.getHp()
             
+            print(defender.getName(), "old HP:", oldHp)
+          
             
             DispatchQueue.main.asyncAfter(deadline: bufferTime){
                 defender.setHp(hp: newHp)
                 attacker.setStance(stance: "vulnerable")
-                print("punch over")
+                print(defender.getName(), "new HP:", newHp, "\n")
+
             }
             return Float(attacker.getStrength())/Float(defender.defense)*Float(20.0)
             
