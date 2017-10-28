@@ -53,16 +53,18 @@ class GameScene: SKScene {
     func fight(player: Fighter, ai: Fighter){
         let coolDownTime = Float(50.0/Float(ai.getSpeed()))/2
         let aiPunch = SKAction.run{
-            print("AI punch")
-
             self.random = arc4random_uniform(4)
             let damage = self.Match.punch(attacker: ai, defender: player, isMonsterMove: false, coolDownTime: coolDownTime)
             self.viewController.modifyUI(attacker: ai, defender: player, input: damage)            
         }
+      //  let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
         let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let printing = SKAction.run{
+            print("AI punching")
+        }
         let coolDown = SKAction.wait(forDuration: TimeInterval(coolDownTime))
         let randomDelay = SKAction.wait(forDuration: 3, withRange: 2)
-        let punch = SKAction.sequence([buildUp, aiPunch, coolDown, randomDelay])
+        let punch = SKAction.sequence([printing, buildUp, aiPunch, coolDown, randomDelay])
         let punchRepeatForever = SKAction.repeatForever(punch)
         self.run(punchRepeatForever)
         

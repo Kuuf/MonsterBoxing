@@ -36,12 +36,12 @@ class Fight{
         let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(300)))
         self.isMonsterMove = isMonsterMove
         
-        // attacker punching left while opponent on right
-        if(attacker.getPosition() == "left" && defender.getPosition() == "right"){
+        // attacker punching left while opponent on the opponent's left
+        if(attacker.getPosition() == "left" && defender.getPosition() == "left"){
             dodged = true
         }
-        // attacker punching right while opponent on left
-        else if(attacker.getPosition() == "right" && defender.getPosition() == "left"){
+        // attacker punching right while opponent on the opponent's left
+        else if(attacker.getPosition() == "right" && defender.getPosition() == "right"){
             dodged = true
         }
         else{
@@ -49,9 +49,11 @@ class Fight{
         }
         
         if (dodged){
+            print(defender.getName(),"dodged the attack\n")
             return 0
         }
         else if(defender.getStance() == "blocking"){
+            print(defender.getName(), "blocked the attack\n")
             blocked = true
             return 0
         }
@@ -61,17 +63,16 @@ class Fight{
         }
         // if normal punch lands
         else{
+            print(attacker.getName(), "punched", defender.getName())
             let newHp = Float(defender.getHp()) - (Float(attacker.getStrength())/Float(defender.defense)*20)
             let oldHp = defender.getHp()
             
             print(defender.getName(), "old HP:", oldHp)
-          
+            print(defender.getName(), "new HP:", newHp, "\n")
+            defender.setHp(hp: newHp)
             
             DispatchQueue.main.asyncAfter(deadline: bufferTime){
-                defender.setHp(hp: newHp)
                 attacker.setStance(stance: "vulnerable")
-                print(defender.getName(), "new HP:", newHp, "\n")
-
             }
             return Float(attacker.getStrength())/Float(defender.defense)*Float(20.0)
             

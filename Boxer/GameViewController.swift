@@ -359,17 +359,16 @@ class GameViewController: UIViewController {
     //uses info returned from Fight.swift's Punch() method to change UI
    
     func modifyUI(attacker: Fighter, defender: Fighter, input: Float){
-        let newHp = defender.getHp() - (attacker.getStrength()/defender.defense)*80
-        let oldHp = defender.getHp()
         //if the defender is the player
         if(attacker.getName() != "Kuufnar"){
             if(Boxer.getStance() != "blocking"){
-                playerHpBar.position.x = playerHpBar.position.x - (playerHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+                print("kuuf hit")
+                playerHpBar.position.x = CGFloat(Float(playerHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(playerHpBar.frame.width))
             }
         }else{
-            opponentHpBar.position.x = opponentHpBar.position.x - (opponentHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
             if(Opponent.getStance() != "blocking"){
-                opponentHpBar.position.x = opponentHpBar.position.x - (opponentHpBar.frame.width * CGFloat((oldHp-newHp)/defender.getOriginalHp()))/4
+                print("Kragen Hit")
+                opponentHpBar.position.x = CGFloat(Float(opponentHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(opponentHpBar.frame.width))
             }
         }
         //^^ modify the 4 according to the dimensions of the container for the hpbar
