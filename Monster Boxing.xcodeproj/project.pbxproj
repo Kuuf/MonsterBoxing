@@ -332,6 +332,7 @@
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 /* End PBXVariantGroup section */
 

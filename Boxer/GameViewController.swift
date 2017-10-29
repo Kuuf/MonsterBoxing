@@ -16,7 +16,6 @@ import GameplayKit
  */
 
 class GameViewController: UIViewController {
-
  
     @IBOutlet weak var playerStance: UILabel!
     @IBOutlet weak var playerPosition: UILabel!
@@ -27,12 +26,10 @@ class GameViewController: UIViewController {
     @IBOutlet weak var opponentPosition: UILabel!
     @IBOutlet weak var opponentStance: UILabel!
     @IBOutlet weak var opponentHp: UILabel!
-    
     @IBOutlet weak var opponentLeft: UIButton!
     @IBOutlet weak var opponentRight: UIButton!
     @IBOutlet weak var opponentPunch: UIButton!
     @IBOutlet weak var opponentBlock: UIButton!
-    
     @IBOutlet weak var resetOpponent: UIButton!
     @IBOutlet weak var resetPlayer: UIButton!
     
@@ -50,15 +47,20 @@ class GameViewController: UIViewController {
     var damage = Float()
     var coolDownTime = Float()
     var sceneNode = SKNode()
+    var boxerMoving = Bool()
+    var punchLength = Float()
+    var punchTimer = Timer()
     
     override func viewDidLoad() {
         canMove = true
         super.viewDidLoad()
         view.isMultipleTouchEnabled = true
+        
         if let scene = GameScene(fileNamed:"GameScene") {
             scene.viewController = self
             // Configure the view.
             let skView = self.view as! SKView
+            
             skView.showsFPS = true
             skView.showsNodeCount = true
             skView.isMultipleTouchEnabled = true
@@ -192,7 +194,7 @@ class GameViewController: UIViewController {
                 Boxer.setStance(stance: "blocking")
                 self.playerStance.text = Boxer.getStance()
             }
-            else{
+            else if(!boxerMoving){
                 Boxer.setPosition(position: "left")
                 self.playerPosition.text = Boxer.getPosition()
                 Boxer.setStance(stance: "vulnerable")
@@ -203,9 +205,15 @@ class GameViewController: UIViewController {
     
     func leftArrowRelease(sender: UIButton?){
         pressingLeft = false
-        let boxerMoving = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        self.boxerMoving = true
+        self.leftKey.isEnabled = false
+        self.rightKey.isEnabled = false
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
+                self.boxerMoving = false
+                self.leftKey.isEnabled = true
+                self.rightKey.isEnabled = true
                 if(!self.pressingRight && !self.pressingLeft){
                     self.Boxer.setPosition(position: "middle")
                     self.playerPosition.text = self.Boxer.getPosition()
@@ -221,7 +229,7 @@ class GameViewController: UIViewController {
             }
         }
         // creates a cooldown to go to center after moving left or right
-        let movementSequence = SKAction.sequence([boxerMoving, boxerDoneMoving])
+        let movementSequence = SKAction.sequence([boxerMovement, boxerDoneMoving])
         sceneNode.run(movementSequence)
     }
     
@@ -234,7 +242,7 @@ class GameViewController: UIViewController {
                 self.playerPosition.text = Boxer.getPosition()
                 Boxer.setStance(stance: "blocking")
                 self.playerStance.text = Boxer.getStance()
-            }else{
+            }else if(!boxerMoving){
                 Boxer.setPosition(position: "right")
                 self.playerPosition.text = Boxer.getPosition()
                 Boxer.setStance(stance: "vulnerable")
@@ -245,9 +253,15 @@ class GameViewController: UIViewController {
     
     func rightArrowRelease(sender: UIButton?){
         pressingRight = false
-        let boxerMoving = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        self.boxerMoving = true
+        self.rightKey.isEnabled = false
+        self.leftKey.isEnabled = false
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
+                self.boxerMoving = false
+                self.rightKey.isEnabled = true
+                self.leftKey.isEnabled = true
                 if(!self.pressingRight && !self.pressingLeft){
                     self.Boxer.setPosition(position: "middle")
                     self.playerPosition.text = self.Boxer.getPosition()
@@ -263,29 +277,34 @@ class GameViewController: UIViewController {
             }
         }
         // creates a cooldown to go to center after moving left or right
-        let movementSequence = SKAction.sequence([boxerMoving, boxerDoneMoving])
+        let movementSequence = SKAction.sequence([boxerMovement, boxerDoneMoving])
         sceneNode.run(movementSequence)
     }
     
     func punchHold(sender: UIButton){
+        punchLength = 0
         Boxer.setStance(stance: "punching")
         self.playerStance.text = Boxer.getStance()
         canMove = false
+        
+        punchTimer = Timer.scheduledTimer(timeInterval: 0, target: self, selector: #selector(self.punchLengthCounter), userInfo: nil, repeats: true)
     }
     
     func punchRelease(sender: UIButton){
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
+        punchTimer.invalidate()
         Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
-        
         //does actual punching action
         damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime)
         modifyUI(attacker: Boxer, defender: Opponent, input: damage)
-
-        
+        print("punch length:", punchLength)
+    }
+    
+    func punchLengthCounter(){
+        punchLength += 0.001
     }
 
-    
     func enablePunchKey(){
         self.punchKey.isEnabled = true
         Boxer.setStance(stance: "vulnerable")
@@ -362,12 +381,10 @@ class GameViewController: UIViewController {
         //if the defender is the player
         if(attacker.getName() != "Kuufnar"){
             if(Boxer.getStance() != "blocking"){
-                print("kuuf hit")
                 playerHpBar.position.x = CGFloat(Float(playerHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(playerHpBar.frame.width))
             }
         }else{
             if(Opponent.getStance() != "blocking"){
-                print("Kragen Hit")
                 opponentHpBar.position.x = CGFloat(Float(opponentHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(opponentHpBar.frame.width))
             }
         }
