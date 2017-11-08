@@ -16,6 +16,7 @@ class GameScene: SKScene {
     var enemy = SKSpriteNode()
     var enemyHpBar = SKShapeNode()
     var playerHpBar = SKShapeNode()
+    var playerStaminaBar = SKShapeNode()
     
     var fightOver = Bool()
     var touch = UITouch()
@@ -44,8 +45,13 @@ class GameScene: SKScene {
         playerHpBar.fillColor = SKColor.green
         playerHpBar.zPosition = 9
         
+        playerStaminaBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+70, y: -(self.frame.height/2)+320, width: self.frame.width/3, height: 30))
+        playerStaminaBar.fillColor = SKColor.red
+        playerStaminaBar.zPosition = 9
+        
         addChild(enemyHpBar)
         addChild(playerHpBar)
+        addChild(playerStaminaBar)
         
         //fight against AI
     }

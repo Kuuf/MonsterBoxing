@@ -45,10 +45,10 @@ class GameViewController: UIViewController {
     var canMove = Bool()
     var directionLastPressed = String()
     var damage = Float()
-    var coolDownTime = Float()
-    var sceneNode = SKNode()
+    var coolDownTime = Float() //fighter movement cool down time
+    var sceneNode = SKNode() // copy of gamescene so it can be accessed
     var boxerMoving = Bool()
-    var punchLength = Float()
+    var punchLength = Float() //duration fighter holds down a puch
     var punchTimer = Timer()
     
     override func viewDidLoad() {
