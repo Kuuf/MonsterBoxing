@@ -17,6 +17,7 @@ class GameScene: SKScene {
     var enemyHpBar = SKShapeNode()
     var playerHpBar = SKShapeNode()
     var playerStaminaBar = SKShapeNode()
+    var aiPunchLength = Float()
     
     var fightOver = Bool()
     var touch = UITouch()
@@ -53,15 +54,21 @@ class GameScene: SKScene {
         addChild(playerHpBar)
         addChild(playerStaminaBar)
         
+        // to get modifyUI up and running
+        // before, player's hp bar wouldn't move until
+        // the player punched
         //fight against AI
     }
     
     func fight(player: Fighter, ai: Fighter){
         let coolDownTime = Float(50.0/Float(ai.getSpeed()))/2
+        aiPunchLength = 5
         let aiPunch = SKAction.run{
             self.random = arc4random_uniform(4)
-            let damage = self.Match.punch(attacker: ai, defender: player, isMonsterMove: false, coolDownTime: coolDownTime)
-            self.viewController.modifyUI(attacker: ai, defender: player, input: damage)            
+            let damage = self.Match.punch(attacker: ai, defender: player, isMonsterMove: false, coolDownTime: coolDownTime, punchLength: self.aiPunchLength)
+            // sets damage for appropriate movement of player HP bar
+            self.viewController.setDamage(damage: damage)
+            self.viewController.modifyUI(attacker: ai, defender: player, input: damage)
         }
       //  let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
         let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))

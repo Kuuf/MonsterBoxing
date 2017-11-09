@@ -48,7 +48,7 @@ class GameViewController: UIViewController {
     var coolDownTime = Float() //fighter movement cool down time
     var sceneNode = SKNode() // copy of gamescene so it can be accessed
     var boxerMoving = Bool()
-    var punchLength = Float() //duration fighter holds down a puch
+    var punchLength = Float() //duration fighter holds down a punch
     var punchTimer = Timer()
     
     override func viewDidLoad() {
@@ -296,7 +296,7 @@ class GameViewController: UIViewController {
         punchTimer.invalidate()
         Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
         //does actual punching action
-        damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime)
+        damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime, punchLength: punchLength)
         modifyUI(attacker: Boxer, defender: Opponent, input: damage)
         print("punch length:", punchLength)
     }
@@ -338,50 +338,19 @@ class GameViewController: UIViewController {
         
     }
     
-
-    // universal damage method, gets called in GameScene as well
-    // return damage from this method to GameScene to modify HP bars
-   /*
-    func damage(attacker: Fighter, damaged: Fighter, punchHoldTime: Float) -> Float{
-
-        // attacker punching left while opponent on right
-        if(attacker.getPosition() == "left" && damaged.getPosition() == "right"){
-            dodged = true
-        }
-        // attacker punching right while opponent on left
-        else if(attacker.getPosition() == "right" && damaged.getPosition() == "left"){
-            dodged = true
-        }
-        else{
-            dodged = false
-        }
-        
-        if(dodged){
-            return 0
-        }
-        else if(damaged.getStance() == "blocking"){
-            print("blocked")
-            return 0
-        }
-        else{
-            //fighter hp gets updated with damage
-            let newHp = damaged.getHp() - (attacker.getStrength()/damaged.defense)*20
-            let oldHp = damaged.getHp()
-            print("oldHp:", oldHp)
-            print("newHp:", newHp)
-            damaged.setHp(hp: damaged.getHp() - (attacker.getStrength()/damaged.defense)*20)
-     
-            return (attacker.getStrength()/damaged.defense)*20
-        }
-    } // damage()
-    */
+    // used so gamescene can modify this class's damage object
+    func setDamage(damage: Float){
+        self.damage = damage
+    }
     //uses info returned from Fight.swift's Punch() method to change UI
-   
     func modifyUI(attacker: Fighter, defender: Fighter, input: Float){
         //if the defender is the player
         if(attacker.getName() != "Kuufnar"){
             if(Boxer.getStance() != "blocking"){
+                print("Player HP Bar Old X:", playerHpBar.position.x )
                 playerHpBar.position.x = CGFloat(Float(playerHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(playerHpBar.frame.width))
+                print("Player HP Bar New X:", playerHpBar.position.x )
+
             }
         }else{
             if(Opponent.getStance() != "blocking"){

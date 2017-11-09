@@ -17,6 +17,7 @@ class Fight{
     var isMonsterMove = Bool()
     var dodged = Bool()
     var blocked = Bool()
+    var damage = Float() // damage done by each respective punch
     
     var player = Fighter()
     var enemy = Fighter()
@@ -31,7 +32,7 @@ class Fight{
         
     }
     
-    func punch(attacker: Fighter, defender: Fighter, isMonsterMove: Bool, coolDownTime: Float) -> Float{
+    func punch(attacker: Fighter, defender: Fighter, isMonsterMove: Bool, coolDownTime: Float, punchLength: Float) -> Float{
         
         let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(300)))
         self.isMonsterMove = isMonsterMove
@@ -63,8 +64,12 @@ class Fight{
         }
         // if normal punch lands
         else{
+            
+            // damage formula
+            damage = Float(attacker.getStrength())/Float(defender.defense)*(5.0 * punchLength)
             print(attacker.getName(), "punched", defender.getName())
-            let newHp = Float(defender.getHp()) - (Float(attacker.getStrength())/Float(defender.defense)*20)
+            
+            let newHp = Float(defender.getHp()) - damage
             let oldHp = defender.getHp()
             
             print(defender.getName(), "old HP:", oldHp)
@@ -74,7 +79,7 @@ class Fight{
             DispatchQueue.main.asyncAfter(deadline: bufferTime){
                 attacker.setStance(stance: "vulnerable")
             }
-            return Float(attacker.getStrength())/Float(defender.defense)*Float(20.0)
+            return damage
             
         }
     }
