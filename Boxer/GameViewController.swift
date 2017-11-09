@@ -53,6 +53,9 @@ class GameViewController: UIViewController {
     var punchLength = Float() //duration fighter holds down a punch
     var punchTimer = Timer()
     var staminaLost = Float() // stamina lost from each respective punch
+    var triggeredByEnablePunchKey = Bool() // used to prevent punching from disabling arrow keys after punching is reenabled
+    var holdingPunchKey = Bool()
+    var workingMovementTime = Float() // used to prevent bug of arrows resetting cooldown when releaseKey methods are called by enablePunchKey
     
     // variables to tweak for gameplay speed & balance (Edit at bottom of viewDidLoad)
     var boxerMovementCooldownTime = Float()
@@ -91,8 +94,6 @@ class GameViewController: UIViewController {
             coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
             boxerMovementCooldownTime = coolDownTime/2
             punchCooldownTime = coolDownTime/2
-            
-
         }
         
         // registering different touches for leftKey
@@ -222,9 +223,17 @@ class GameViewController: UIViewController {
     func leftArrowRelease(sender: UIButton?){
         pressingLeft = false
         self.boxerMoving = true
-        self.leftKey.isEnabled = false
-        self.rightKey.isEnabled = false
-        let boxerMovement = SKAction.wait(forDuration: TimeInterval(boxerMovementCooldownTime))
+        if(!triggeredByEnablePunchKey && !holdingPunchKey){
+            self.rightKey.isEnabled = false
+            self.leftKey.isEnabled = false
+        }
+        if(triggeredByEnablePunchKey){
+            workingMovementTime = 0 // movement time isn't actually 0, just prevents the addition of more cooldown time when being called my enablePunchKey()
+        }else{
+            workingMovementTime = boxerMovementCooldownTime
+        }
+        
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(workingMovementTime))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
                 self.boxerMoving = false
@@ -270,9 +279,17 @@ class GameViewController: UIViewController {
     func rightArrowRelease(sender: UIButton?){
         pressingRight = false
         self.boxerMoving = true
-        self.rightKey.isEnabled = false
-        self.leftKey.isEnabled = false
-        let boxerMovement = SKAction.wait(forDuration: TimeInterval(boxerMovementCooldownTime))
+        if(!triggeredByEnablePunchKey && !holdingPunchKey){
+            self.rightKey.isEnabled = false
+            self.leftKey.isEnabled = false
+        }
+        if(triggeredByEnablePunchKey){
+            workingMovementTime = 0 // movement time isn't actually 0, just prevents the addition of more cooldown time when being called my enablePunchKey()
+        }else{
+            workingMovementTime = boxerMovementCooldownTime
+        }
+        
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(workingMovementTime))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
                 self.boxerMoving = false
@@ -298,6 +315,7 @@ class GameViewController: UIViewController {
     }
     
     func punchHold(sender: UIButton){
+        holdingPunchKey = true
         punchLength = 0
         Boxer.setStance(stance: "punching")
         self.playerStance.text = Boxer.getStance()
@@ -307,6 +325,7 @@ class GameViewController: UIViewController {
     }
     
     func punchRelease(sender: UIButton){
+        holdingPunchKey = false
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
         punchTimer.invalidate()
@@ -354,15 +373,23 @@ class GameViewController: UIViewController {
             print("pressing right after punch ends")
 
         }
+        // old method with button freeze bug, testing out one below
+        
         if(!pressingLeft && !pressingRight){
             if(directionLastPressed == "right"){
+                triggeredByEnablePunchKey = true
                 rightArrowRelease(sender: nil)
+                triggeredByEnablePunchKey = false // reset for next punch scenario
+                
             }
             
             if(directionLastPressed == "left"){
+                triggeredByEnablePunchKey = true
                 leftArrowRelease(sender: nil)
+                triggeredByEnablePunchKey = false // reset for next punch scenario
             }
         }
+
     }
     
     // used so gamescene can modify this class's damage object
