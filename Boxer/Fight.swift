@@ -34,8 +34,7 @@ class Fight{
     }
     
     func punch(attacker: Fighter, defender: Fighter, isMonsterMove: Bool, coolDownTime: Float, punchLength: Float) -> Float{
-        
-        let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(300)))
+        let bufferTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(coolDownTime*Float(1000)))
         self.isMonsterMove = isMonsterMove
         
         // attacker punching left while opponent on the opponent's left

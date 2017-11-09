@@ -54,6 +54,10 @@ class GameViewController: UIViewController {
     var punchTimer = Timer()
     var staminaLost = Float() // stamina lost from each respective punch
     
+    // variables to tweak for gameplay speed & balance (Edit at bottom of viewDidLoad)
+    var boxerMovementCooldownTime = Float()
+    var punchCooldownTime = Float()
+    
     override func viewDidLoad() {
         canMove = true
         super.viewDidLoad()
@@ -82,7 +86,12 @@ class GameViewController: UIViewController {
             opponentHpBar = scene.enemyHpBar
             playerStaminaBar = scene.playerStaminaBar
             opponentStaminaBar = scene.opponentStaminaBar
+            
+            // variables to tweak for gameplay speed & balance
             coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
+            boxerMovementCooldownTime = coolDownTime/2
+            punchCooldownTime = coolDownTime/2
+            
 
         }
         
@@ -215,7 +224,7 @@ class GameViewController: UIViewController {
         self.boxerMoving = true
         self.leftKey.isEnabled = false
         self.rightKey.isEnabled = false
-        let boxerMovement = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(boxerMovementCooldownTime))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
                 self.boxerMoving = false
@@ -263,7 +272,7 @@ class GameViewController: UIViewController {
         self.boxerMoving = true
         self.rightKey.isEnabled = false
         self.leftKey.isEnabled = false
-        let boxerMovement = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
+        let boxerMovement = SKAction.wait(forDuration: TimeInterval(boxerMovementCooldownTime))
         let boxerDoneMoving = SKAction.run{
             if(self.canMove){
                 self.boxerMoving = false
@@ -301,18 +310,30 @@ class GameViewController: UIViewController {
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
         punchTimer.invalidate()
-        Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime/2), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(punchCooldownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
+        
+        // setting minimum punch strength for tapping button
+        if (punchLength < 1){
+            punchLength = 1
+        }
         //does actual punching action
-        damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime, punchLength: punchLength)
+        damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: punchCooldownTime, punchLength: punchLength)
         staminaLost = Match.setStamina(attacker: Boxer, punchLength: punchLength)
         modifyUI(attacker: Boxer, defender: Opponent)
         print("punch length:", punchLength)
+        
+        // resetting punch length
+        punchLength = 0
     }
     
     func punchLengthCounter(){
         punchLength += 0.001
     }
 
+    func setStanceText(text: String){
+        playerStance.text = text
+    }
+    
     func enablePunchKey(){
         self.punchKey.isEnabled = true
         Boxer.setStance(stance: "vulnerable")
