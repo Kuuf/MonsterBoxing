@@ -17,6 +17,7 @@ class GameScene: SKScene {
     var enemyHpBar = SKShapeNode()
     var playerHpBar = SKShapeNode()
     var playerStaminaBar = SKShapeNode()
+    var opponentStaminaBar = SKShapeNode()
     var aiPunchLength = Float()
     
     var fightOver = Bool()
@@ -33,10 +34,9 @@ class GameScene: SKScene {
         view.isMultipleTouchEnabled = true
         self.backgroundColor = SKColor.white
         
-        Boxer = Fighter(name: "Kuufnar", hp: 150, defense: 50, strength: 50, speed: 75)
-        Opponent = Fighter(name: "Kragen", hp: 300, defense: 100, strength: 20, speed: 20)
+        Boxer = Fighter(name: "Kuufnar", hp: 150, defense: 50, strength: 50, speed: 75, stamina: 75)
+        Opponent = Fighter(name: "Kragen", hp: 300, defense: 100, strength: 20, speed: 20, stamina: 50)
         Match = Fight(player: Boxer, enemy: Opponent)
-        
         
         enemyHpBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+30, y: (self.frame.height/2)-90, width: self.frame.width-60, height: 60))
         enemyHpBar.fillColor = SKColor.blue
@@ -49,6 +49,8 @@ class GameScene: SKScene {
         playerStaminaBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+70, y: -(self.frame.height/2)+320, width: self.frame.width/3, height: 30))
         playerStaminaBar.fillColor = SKColor.red
         playerStaminaBar.zPosition = 9
+        
+        
         
         addChild(enemyHpBar)
         addChild(playerHpBar)
@@ -66,9 +68,11 @@ class GameScene: SKScene {
         let aiPunch = SKAction.run{
             self.random = arc4random_uniform(4)
             let damage = self.Match.punch(attacker: ai, defender: player, isMonsterMove: false, coolDownTime: coolDownTime, punchLength: self.aiPunchLength)
-            // sets damage for appropriate movement of player HP bar
+            let staminaLost = self.Match.setStamina(attacker: ai, punchLength: self.aiPunchLength)
+            // sets damage and stamina for appropriate movement of player HP and Stamina UI
+            self.viewController.setStaminaLost(staminaLost: staminaLost)
             self.viewController.setDamage(damage: damage)
-            self.viewController.modifyUI(attacker: ai, defender: player, input: damage)
+            self.viewController.modifyUI(attacker: ai, defender: player)
         }
       //  let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
         let buildUp = SKAction.wait(forDuration: TimeInterval(coolDownTime/2))
@@ -82,6 +86,20 @@ class GameScene: SKScene {
         self.run(punchRepeatForever)
         
         
+        let regenerateStamina = SKAction.run{
+            if(self.Boxer.getStamina() < self.Boxer.getOriginalStamina()){
+                self.Boxer.setStamina(stamina: self.Boxer.getStamina()+0.05)
+                self.playerStaminaBar.position.x = CGFloat(Float(self.playerStaminaBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaBar.frame.width))
+            }
+            if(self.Opponent.getStamina() != self.Opponent.getOriginalStamina()){
+                self.Opponent.setStamina(stamina: self.Opponent.getStamina()+10)
+
+            }
+        }
+        let delay = SKAction.wait(forDuration: TimeInterval(0.01))
+        let staminaActionSequence = SKAction.sequence([regenerateStamina,delay])
+        let regenerateStaminaForever = SKAction.repeatForever(staminaActionSequence)
+        self.run(regenerateStaminaForever)
         
         
     }

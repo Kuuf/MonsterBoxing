@@ -42,6 +42,8 @@ class GameViewController: UIViewController {
     var punchHoldTime = Int()
     var playerHpBar = SKShapeNode()
     var opponentHpBar = SKShapeNode()
+    var playerStaminaBar = SKShapeNode()
+    var opponentStaminaBar = SKShapeNode()
     var canMove = Bool()
     var directionLastPressed = String()
     var damage = Float()
@@ -50,6 +52,7 @@ class GameViewController: UIViewController {
     var boxerMoving = Bool()
     var punchLength = Float() //duration fighter holds down a punch
     var punchTimer = Timer()
+    var staminaLost = Float() // stamina lost from each respective punch
     
     override func viewDidLoad() {
         canMove = true
@@ -77,6 +80,8 @@ class GameViewController: UIViewController {
             Opponent = scene.Opponent
             playerHpBar = scene.playerHpBar
             opponentHpBar = scene.enemyHpBar
+            playerStaminaBar = scene.playerStaminaBar
+            opponentStaminaBar = scene.opponentStaminaBar
             coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
 
         }
@@ -136,6 +141,8 @@ class GameViewController: UIViewController {
         Boxer.setHp(hp: Boxer.getOriginalHp())
         playerHp.text = String(Boxer.getHp())
         playerHpBar.position.x = 0
+        playerStaminaBar.position.x = 0
+        Boxer.setStamina(stamina: Boxer.getOriginalStamina())
     }
     
     func oppBlock(sender: UIButton){
@@ -294,10 +301,11 @@ class GameViewController: UIViewController {
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
         punchTimer.invalidate()
-        Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(coolDownTime/2), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
         //does actual punching action
         damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: coolDownTime, punchLength: punchLength)
-        modifyUI(attacker: Boxer, defender: Opponent, input: damage)
+        staminaLost = Match.setStamina(attacker: Boxer, punchLength: punchLength)
+        modifyUI(attacker: Boxer, defender: Opponent)
         print("punch length:", punchLength)
     }
     
@@ -334,27 +342,35 @@ class GameViewController: UIViewController {
                 leftArrowRelease(sender: nil)
             }
         }
-       
-        
     }
     
     // used so gamescene can modify this class's damage object
     func setDamage(damage: Float){
         self.damage = damage
     }
+    
+    // used so gamescene can modify this class's staminaLost object
+    func setStaminaLost(staminaLost: Float){
+        self.staminaLost = staminaLost
+    }
     //uses info returned from Fight.swift's Punch() method to change UI
-    func modifyUI(attacker: Fighter, defender: Fighter, input: Float){
+    func modifyUI(attacker: Fighter, defender: Fighter){
         //if the defender is the player
         if(attacker.getName() != "Kuufnar"){
             if(Boxer.getStance() != "blocking"){
-                print("Player HP Bar Old X:", playerHpBar.position.x )
+                // change Player HP bar
                 playerHpBar.position.x = CGFloat(Float(playerHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(playerHpBar.frame.width))
-                print("Player HP Bar New X:", playerHpBar.position.x )
-
+                
+                // change Opponent stamina bar
             }
         }else{
             if(Opponent.getStance() != "blocking"){
+                // change Opponent HP bar
                 opponentHpBar.position.x = CGFloat(Float(opponentHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(opponentHpBar.frame.width))
+                
+                // change Player stamina Bar
+                playerStaminaBar.position.x = CGFloat(Float(playerStaminaBar.position.x) - (staminaLost/attacker.getOriginalStamina()) * Float(playerStaminaBar.frame.width))
+                print("player stamina:", attacker.getStamina())
             }
         }
         //^^ modify the 4 according to the dimensions of the container for the hpbar

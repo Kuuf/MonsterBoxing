@@ -18,6 +18,7 @@ class Fight{
     var dodged = Bool()
     var blocked = Bool()
     var damage = Float() // damage done by each respective punch
+    var staminaLost = Float()
     
     var player = Fighter()
     var enemy = Fighter()
@@ -51,15 +52,24 @@ class Fight{
         
         if (dodged){
             print(defender.getName(),"dodged the attack\n")
+            DispatchQueue.main.asyncAfter(deadline: bufferTime){
+                attacker.setStance(stance: "vulnerable")
+            }
             return 0
         }
         else if(defender.getStance() == "blocking"){
             print(defender.getName(), "blocked the attack\n")
             blocked = true
+            DispatchQueue.main.asyncAfter(deadline: bufferTime){
+                attacker.setStance(stance: "vulnerable")
+            }
             return 0
         }
         // if monster punch lands
         else if(isMonsterMove){
+            DispatchQueue.main.asyncAfter(deadline: bufferTime){
+                attacker.setStance(stance: "vulnerable")
+            }
             return 0
         }
         // if normal punch lands
@@ -82,6 +92,14 @@ class Fight{
             return damage
             
         }
+    }
+    
+    func setStamina(attacker: Fighter, punchLength: Float) -> Float{
+        
+        staminaLost = punchLength*2
+        attacker.setStamina(stamina: attacker.getStamina()-staminaLost)
+
+        return staminaLost
     }
     
     func setCoolDownTime(coolDownTime: Float){

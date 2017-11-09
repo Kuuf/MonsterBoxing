@@ -13,14 +13,16 @@ class Fighter{
     
     var name = String()
     var originalHp = Float()
+    var originalStamina = Float()
     var hp = Float()
     var defense = Float()
     var strength = Float()
     var speed = Float() // speed
     var stance = String()
     var position = String() // position
+    var stamina = Float()
     
-    init(name: String, hp: Float, defense: Float, strength: Float, speed: Float){
+    init(name: String, hp: Float, defense: Float, strength: Float, speed: Float, stamina: Float){
         self.hp = hp
         self.name = name
         self.originalHp = hp
@@ -29,6 +31,8 @@ class Fighter{
         self.speed = speed
         self.stance = "vulnerable"
         self.position = "middle"
+        self.stamina = stamina
+        self.originalStamina = stamina
     }
 
     required init() {
@@ -95,6 +99,21 @@ class Fighter{
         return position
     }
   
+    func setStamina(stamina: Float){
+        self.stamina = stamina
+    }
+    
+    func getStamina() -> Float{
+        return stamina
+    }
+    
+    func setOriginalStamina(stamina: Float){
+        self.originalStamina = stamina
+    }
+    
+    func getOriginalStamina() -> Float{
+        return originalStamina
+    }
     
     /*
      position:
