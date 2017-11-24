@@ -17,6 +17,15 @@ import GameplayKit
 
 class GameViewController: UIViewController {
  
+    
+    // **ALL MIGHTY VARIABLES**
+    //variables to tweak for gameplay speed & balance (Edit at bottom of viewDidLoad)
+    
+    var boxerMovementCooldownTime = Float()
+    var punchCooldownTime = Float()
+    
+    // *************** //
+    
     @IBOutlet weak var playerStance: UILabel!
     @IBOutlet weak var playerPosition: UILabel!
     @IBOutlet weak var playerHp: UILabel!
@@ -56,10 +65,8 @@ class GameViewController: UIViewController {
     var triggeredByEnablePunchKey = Bool() // used to prevent punching from disabling arrow keys after punching is reenabled
     var holdingPunchKey = Bool()
     var workingMovementTime = Float() // used to prevent bug of arrows resetting cooldown when releaseKey methods are called by enablePunchKey
-    
-    // variables to tweak for gameplay speed & balance (Edit at bottom of viewDidLoad)
-    var boxerMovementCooldownTime = Float()
-    var punchCooldownTime = Float()
+    var playerStaminaAnimationBar = SKShapeNode()
+    var potentialStaminaLost = Float()
     
     override func viewDidLoad() {
         canMove = true
@@ -89,6 +96,7 @@ class GameViewController: UIViewController {
             opponentHpBar = scene.enemyHpBar
             playerStaminaBar = scene.playerStaminaBar
             opponentStaminaBar = scene.opponentStaminaBar
+            playerStaminaAnimationBar = scene.playerStaminaAnimationBar
             
             // variables to tweak for gameplay speed & balance
             coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
@@ -110,7 +118,6 @@ class GameViewController: UIViewController {
         punchKey.addTarget(self, action: #selector(GameViewController.punchRelease), for: UIControlEvents.touchUpInside)
         punchKey.addTarget(self, action: #selector(GameViewController.punchRelease), for: UIControlEvents.touchUpOutside)
         punchKey.addTarget(self, action: #selector(GameViewController.punchHold), for: UIControlEvents.touchDown)
-        
         
         
 //**** temporary for opponent functionality testing ****//
@@ -152,6 +159,7 @@ class GameViewController: UIViewController {
         playerHp.text = String(Boxer.getHp())
         playerHpBar.position.x = 0
         playerStaminaBar.position.x = 0
+        playerStaminaAnimationBar.position.x = 0
         Boxer.setStamina(stamina: Boxer.getOriginalStamina())
     }
     
@@ -314,6 +322,7 @@ class GameViewController: UIViewController {
         sceneNode.run(movementSequence)
     }
     
+    
     func punchHold(sender: UIButton){
         holdingPunchKey = true
         punchLength = 0
@@ -321,10 +330,12 @@ class GameViewController: UIViewController {
         self.playerStance.text = Boxer.getStance()
         canMove = false
         
-        punchTimer = Timer.scheduledTimer(timeInterval: 0, target: self, selector: #selector(self.punchLengthCounter), userInfo: nil, repeats: true)
+        punchTimer = Timer.scheduledTimer(timeInterval: 0, target: self, selector: #selector(self.punchLengthAndStaminaCounter), userInfo: nil, repeats: true)
+        
+        
     }
     
-    func punchRelease(sender: UIButton){
+    func punchRelease(sender: UIButton?){
         holdingPunchKey = false
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
@@ -345,8 +356,17 @@ class GameViewController: UIViewController {
         punchLength = 0
     }
     
-    func punchLengthCounter(){
+    // used to determine punch length and also animate the potential stamina lost from punch
+    func punchLengthAndStaminaCounter(){
         punchLength += 0.001
+        potentialStaminaLost += 0.002
+        
+        self.playerStaminaAnimationBar.position.x = CGFloat(Float(self.playerStaminaAnimationBar.position.x) - (0.002/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width))
+        
+        // potentialstaminalost > total stamina
+        if(0-playerStaminaAnimationBar.frame.width > playerStaminaAnimationBar.position.x){
+            punchRelease(sender: nil)
+        }
     }
 
     func setStanceText(text: String){
@@ -397,10 +417,20 @@ class GameViewController: UIViewController {
         self.damage = damage
     }
     
+    // used to set stamina loss so Gamescene can modify this variable, used for animation of stamina bar while holding down punch button
+    func setPotentialStaminaLoss(potentialStaminaLost: Float){
+        self.potentialStaminaLost = potentialStaminaLost
+    }
+    
     // used so gamescene can modify this class's staminaLost object
     func setStaminaLost(staminaLost: Float){
         self.staminaLost = staminaLost
     }
+    
+    func setStaminaAnimationBarPosition(){
+        
+    }
+    
     //uses info returned from Fight.swift's Punch() method to change UI
     func modifyUI(attacker: Fighter, defender: Fighter){
         //if the defender is the player
