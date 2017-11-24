@@ -159,7 +159,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1750" y="36"/>
+            <point key="canvasLocation" x="2606" y="36"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="VsZ-UH-QJj">
@@ -223,7 +223,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Es-Ba-JOO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="782" y="839"/>
+            <point key="canvasLocation" x="865" y="839"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="J9p-Zy-ATL">
@@ -254,20 +254,24 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4K-qr-fEz">
-                                <rect key="frame" x="103" y="280" width="169" height="62"/>
+                                <rect key="frame" x="103" y="280" width="157" height="62"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <state key="normal" backgroundImage="play button"/>
                                 <connections>
                                     <segue destination="LHv-h5-aE2" kind="presentation" animates="NO" id="QjV-7i-g7q"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Title" translatesAutoresizingMaskIntoConstraints="NO" id="RAZ-S4-lvQ">
+                                <rect key="frame" x="11" y="20" width="353" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2M6-dL-lUk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-44" y="36"/>
+            <point key="canvasLocation" x="1" y="28"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="yRy-Fm-vCs">
@@ -281,19 +285,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0O-m1-N4Z">
-                                <rect key="frame" x="111" y="40" width="153" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Player Info">
-                                        <attributes>
-                                            <font key="NSFont" size="31" name="Trattatello"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9SC-9z-5YO">
+                                <rect key="frame" x="270" y="523" width="83" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Arrow"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yNr-6i-rc4">
+                                <rect key="frame" x="156" y="542" width="63" height="61"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Check"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNf-9B-Pr5">
+                                <rect key="frame" x="24" y="523" width="82" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Left Arrow"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="juS-CC-Yje">
+                                <rect key="frame" x="8" y="8" width="32" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Left Arrow"/>
+                                <connections>
+                                    <segue destination="aSh-pu-CLD" kind="presentation" animates="NO" id="YAN-RB-yz3"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -302,17 +316,66 @@
             </objects>
             <point key="canvasLocation" x="864.79999999999995" y="35.532233883058474"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="phR-co-vp4">
+            <objects>
+                <viewController id="rO4-cg-rMN" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dGr-lO-T5s"/>
+                        <viewControllerLayoutGuide type="bottom" id="vPs-zE-ihF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3YR-w9-SZi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1kJ-pf-4zp">
+                                <rect key="frame" x="269" y="529" width="83" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Arrow"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2PR-om-luz">
+                                <rect key="frame" x="155" y="548" width="63" height="61"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Check"/>
+                                <connections>
+                                    <segue destination="BV1-FR-VrT" kind="presentation" animates="NO" id="Rgt-nh-Epp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IRM-4t-5AH">
+                                <rect key="frame" x="23" y="529" width="82" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Left Arrow"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOq-uY-HSc">
+                                <rect key="frame" x="16" y="0.0" width="32" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Left Arrow"/>
+                                <connections>
+                                    <segue destination="LHv-h5-aE2" kind="presentation" animates="NO" id="TSw-eH-tWB"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WmI-a6-x2v" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1765" y="29"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Arrow" width="1092" height="1329"/>
+        <image name="Check" width="328" height="320"/>
         <image name="Left Arrow" width="1092" height="1329"/>
         <image name="Punch" width="1829" height="1884"/>
+        <image name="Title" width="1000" height="176"/>
         <image name="back button" width="678" height="226"/>
         <image name="dev info button" width="1120" height="226"/>
         <image name="how to play button" width="1748" height="226"/>
-        <image name="play button" width="608" height="226"/>
+        <image name="play button" width="700" height="292"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="x7u-a5-xav"/>
+        <segue reference="TSw-eH-tWB"/>
+        <segue reference="Q9Q-Jc-BWg"/>
     </inferredMetricsTieBreakers>
 </document>
