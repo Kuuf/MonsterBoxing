@@ -336,6 +336,7 @@ class GameViewController: UIViewController {
     }
     
     func punchRelease(sender: UIButton?){
+        potentialStaminaLost = 0
         holdingPunchKey = false
         //disables button for coolDownTime
         self.punchKey.isEnabled = false
@@ -361,7 +362,7 @@ class GameViewController: UIViewController {
         punchLength += 0.001
         potentialStaminaLost += 0.002
         
-        self.playerStaminaAnimationBar.position.x = CGFloat(Float(self.playerStaminaAnimationBar.position.x) - (0.002/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width))
+        setStaminaAnimationBarPosition(position:  CGFloat(Float(self.playerStaminaBar.position.x) - (potentialStaminaLost/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width)))
         
         // potentialstaminalost > total stamina
         if(0-playerStaminaAnimationBar.frame.width > playerStaminaAnimationBar.position.x){
@@ -427,8 +428,13 @@ class GameViewController: UIViewController {
         self.staminaLost = staminaLost
     }
     
-    func setStaminaAnimationBarPosition(){
-        
+    func setStaminaAnimationBarPosition(position: CGFloat){
+        let previousPosition = playerStaminaAnimationBar.position.x
+        playerStaminaAnimationBar.position.x = position
+        if((previousPosition - position) < 0.0067){
+            print("BUG BUG BUG")
+        }
+       // print("Bar position change:", previousPosition - position)
     }
     
     //uses info returned from Fight.swift's Punch() method to change UI

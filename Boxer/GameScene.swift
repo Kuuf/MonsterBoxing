@@ -90,14 +90,13 @@ class GameScene: SKScene {
         self.run(punchRepeatForever)
         
         // .05 is the degree of loss each iteration, combined with the interval of .01 given in the delay variable below, meaning every .01 seconds the bar moves .05 backward
-        var tempCounter: Float = 0
         let regenerateStamina = SKAction.run{
             if((self.Boxer.getStamina() < self.Boxer.getOriginalStamina()) && self.Boxer.getStance() != "punching"){
                 self.Boxer.setStamina(stamina: self.Boxer.getStamina()+0.05)
                 // animate true stamina bar
                 self.playerStaminaBar.position.x = CGFloat(Float(self.playerStaminaBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaBar.frame.width))
                 // animate stamina animation bar
-                self.playerStaminaAnimationBar.position.x = CGFloat(Float(self.playerStaminaAnimationBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width))
+                self.viewController.setStaminaAnimationBarPosition(position: CGFloat(Float(self.playerStaminaAnimationBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width)))
                 
             }
             if(self.Opponent.getStamina() != self.Opponent.getOriginalStamina()){
