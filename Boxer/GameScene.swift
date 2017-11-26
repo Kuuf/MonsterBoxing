@@ -12,6 +12,8 @@ import GameplayKit
 class GameScene: SKScene {
     
     var viewController: GameViewController!
+    var playerSelectScreen: PlayerSelectScreen!
+    var playerConfirmScreen: PlayerConfirmScreen!
     var player = SKSpriteNode()
     var enemy = SKSpriteNode()
     var enemyHpBar = SKShapeNode()

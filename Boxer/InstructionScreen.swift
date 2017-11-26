@@ -8,6 +8,6 @@
 import SpriteKit
 import Foundation
 
-class InstructionScreen: SKScene {
+class InstructionScreen: UIViewController {
     
 }
