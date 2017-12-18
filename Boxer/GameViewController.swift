@@ -28,13 +28,11 @@ class GameViewController: UIViewController {
     
     @IBOutlet weak var playerStance: UILabel!
     @IBOutlet weak var playerPosition: UILabel!
-    @IBOutlet weak var playerHp: UILabel!
     @IBOutlet weak var leftKey: UIButton!
     @IBOutlet weak var rightKey: UIButton!
     @IBOutlet weak var punchKey: UIButton!
     @IBOutlet weak var opponentPosition: UILabel!
     @IBOutlet weak var opponentStance: UILabel!
-    @IBOutlet weak var opponentHp: UILabel!
     @IBOutlet weak var opponentLeft: UIButton!
     @IBOutlet weak var opponentRight: UIButton!
     @IBOutlet weak var opponentPunch: UIButton!
@@ -151,7 +149,6 @@ class GameViewController: UIViewController {
         Opponent.setStance(stance: "vulnerable")
         opponentStance.text = Opponent.getStance()
         Opponent.setHp(hp: Opponent.getOriginalHp())
-        opponentHp.text = String(Opponent.getHp())
         opponentHpBar.position.x = 0
     }
     
@@ -161,7 +158,6 @@ class GameViewController: UIViewController {
         Boxer.setStance(stance: "vulnerable")
         playerStance.text = Boxer.getStance()
         Boxer.setHp(hp: Boxer.getOriginalHp())
-        playerHp.text = String(Boxer.getHp())
         playerHpBar.position.x = 0
         playerStaminaBar.position.x = 0
         playerStaminaAnimationBar.position.x = 0
