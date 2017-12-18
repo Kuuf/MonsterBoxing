@@ -11,6 +11,7 @@ import Foundation
 class PlayerSelectScreen: UIViewController {
         
     //@IBOutlet weak var puckCard: UIButton!
+    @IBOutlet weak var puckCard: UIButton!
     @IBOutlet weak var kragenCard: UIButton!
     @IBOutlet weak var kuufnarCard: UIButton!
     @IBOutlet weak var rahCard: UIButton!
@@ -18,13 +19,14 @@ class PlayerSelectScreen: UIViewController {
   
     var gameScene = GameScene()
     var playerConfirmScreen = PlayerConfirmScreen()
+    var card: UIImage!
     
     override func viewDidLoad() {
-        /*
+        
         //registering different touches for puckCard
         puckCard.addTarget(self, action: #selector(PlayerSelectScreen.puckCardRelease), for: UIControlEvents.touchUpInside)
         puckCard.addTarget(self, action: #selector(PlayerSelectScreen.puckCardRelease), for: UIControlEvents.touchUpOutside)
-     */
+     
         //registering different touches for kragenCard
         kragenCard.addTarget(self, action: #selector(PlayerSelectScreen.kragenCardRelease), for: UIControlEvents.touchUpInside)
         kragenCard.addTarget(self, action: #selector(PlayerSelectScreen.kragenCardRelease), for: UIControlEvents.touchUpOutside)
@@ -40,34 +42,33 @@ class PlayerSelectScreen: UIViewController {
     
     }
     
-    func puckCardRelease(){
-      //  playerConfirmScreen.setPlayerCard(cardName: "Card_Puck.png")
-      
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-     
+        if segue.identifier == "toPlayerConfirmScreen" {
+            let destination = segue.destination as! PlayerConfirmScreen
+            destination.card = card
+        }
     }
-    
-    // BUG IS HERE HERE HERE HERE
-    @IBAction func puckCardPress(_ sender: Any) {
-        playerConfirmScreen.cardName = "Card_Puck.png"
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let playerConfirmScreenVC = storyBoard.instantiateViewController(withIdentifier: "PlayerConfirmScreen") as! PlayerConfirmScreen
-        self.navigationController?.pushViewController(playerConfirmScreenVC, animated: false)
+
+    func puckCardRelease(){
+        card = UIImage(named: "Card_Puck.png")
+        self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kragenCardRelease(){
-        self.playerConfirmScreen.setPlayerCard(cardName: "Card_Kragen.png")
-
+        card = UIImage(named: "Card_Kragen.png")
+        self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kuufnarCardRelease(){
-        self.playerConfirmScreen.setPlayerCard(cardName: "Card_Kuufnar.png")
-
+        card = UIImage(named: "Card_Kuufnar.png")
+        self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func rahCardRelease(){
-        self.playerConfirmScreen.setPlayerCard(cardName: "Card_Rah.png")
-
+        card = UIImage(named: "Card_Rah.png")
+        self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
  
 }
