@@ -13,45 +13,26 @@ class PlayerConfirmScreen: UIViewController {
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playerCard: UIImageView!
-    
     //sets player card image to player selected card
-    var card: UIImage!
+    var playerCardImage: UIImage!
+    var playerBoxer = Fighter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        playerCard.image = card
+        playerCard.image = playerCardImage
         
     }
     
-    func setPlayerCard(cardName: String){
-        print("cardName:", cardName)
-        //self.cardName = cardName
-        //print("self.cardName:", self.cardName, "\n")
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        // setting playerCard to selected Fighter
-        if(cardName == "Card_Puck.png"){
-            print("Puck")
-            //playerCard.image = UIImage(named: "Card_Puck.png")
+        if segue.identifier == "toEnemySelectScreen" {
+            let destination = segue.destination as! EnemySelectScreen
+            destination.playerBoxer = playerBoxer
+            destination.playerCardImage = playerCardImage
         }
-        if(cardName == "Card_Kragen.png"){
-            print("Kragen")
-            
-            playerCard.image = UIImage(named: "Card_Kragen.png")
-        }
-        if(cardName == "Card_Rah.png"){
-            print("Rah")
-            
-            playerCard.image = UIImage(named: "Card_Rah.png")
-        }
-        if(cardName == "Card_Kuufnar.png"){
-            print("Kuufnar")
-            
-            playerCard.image = UIImage(named: "Card_Kuufnar.png")
-        }
-        
     }
     
-    
-    
+    @IBAction func touchCheckButton(_ sender: Any) {
+        self.performSegue(withIdentifier: "toEnemySelectScreen", sender: self)
+    }
 }

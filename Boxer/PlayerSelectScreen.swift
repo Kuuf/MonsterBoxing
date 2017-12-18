@@ -19,7 +19,9 @@ class PlayerSelectScreen: UIViewController {
   
     var gameScene = GameScene()
     var playerConfirmScreen = PlayerConfirmScreen()
-    var card: UIImage!
+    var playerCard: UIImage!
+    var playerBoxer = Fighter()
+    var deck = Fighters()
     
     override func viewDidLoad() {
         
@@ -35,7 +37,7 @@ class PlayerSelectScreen: UIViewController {
         kuufnarCard.addTarget(self, action: #selector(PlayerSelectScreen.kuufnarCardRelease), for: UIControlEvents.touchUpInside)
         kuufnarCard.addTarget(self, action: #selector(PlayerSelectScreen.kuufnarCardRelease), for: UIControlEvents.touchUpOutside)
         
-        //registering different touches for puckCard
+        //registering different touches for rahCard
         rahCard.addTarget(self, action: #selector(PlayerSelectScreen.rahCardRelease), for: UIControlEvents.touchUpInside)
         rahCard.addTarget(self, action: #selector(PlayerSelectScreen.rahCardRelease), for: UIControlEvents.touchUpOutside)
  
@@ -47,27 +49,32 @@ class PlayerSelectScreen: UIViewController {
         
         if segue.identifier == "toPlayerConfirmScreen" {
             let destination = segue.destination as! PlayerConfirmScreen
-            destination.card = card
+            destination.playerCardImage = playerCard
+            destination.playerBoxer = playerBoxer
         }
     }
 
     func puckCardRelease(){
-        card = UIImage(named: "Card_Puck.png")
+        playerCard = UIImage(named: "Card_Puck.png")
+        playerBoxer = deck.getFighter(name: "Puck")
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kragenCardRelease(){
-        card = UIImage(named: "Card_Kragen.png")
+        playerCard = UIImage(named: "Card_Kragen.png")
+        playerBoxer = deck.getFighter(name: "Kragen")
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kuufnarCardRelease(){
-        card = UIImage(named: "Card_Kuufnar.png")
+        playerCard = UIImage(named: "Card_Kuufnar.png")
+        playerBoxer = deck.getFighter(name: "Kuufnar")
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func rahCardRelease(){
-        card = UIImage(named: "Card_Rah.png")
+        playerCard = UIImage(named: "Card_Rah.png")
+        playerBoxer = deck.getFighter(name: "Rah")
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
  
