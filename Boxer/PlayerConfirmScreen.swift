@@ -10,7 +10,6 @@ import Foundation
 
 class PlayerConfirmScreen: UIViewController {
 
-    @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playerCard: UIImageView!
     //sets player card image to player selected card

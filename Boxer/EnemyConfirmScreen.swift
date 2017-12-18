@@ -15,8 +15,8 @@ class EnemyConfirmScreen: UIViewController {
     var playerCardImage: UIImage!
     var enemyBoxer = Fighter()
     var playerBoxer = Fighter()
+    var deck = Fighters()
     @IBOutlet weak var enemyCard: UIImageView!
-    @IBOutlet weak var fightButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +31,20 @@ class EnemyConfirmScreen: UIViewController {
             destination.playerBoxer = playerBoxer
             destination.enemyBoxer = enemyBoxer
         }
+        
+        if segue.identifier == "toGameViewController"{
+            let destination = segue.destination as! GameViewController
+            destination.Boxer = playerBoxer
+            destination.Opponent = enemyBoxer
+        }
     }
     
     @IBAction func backButtonPress(_ sender: Any) {
         self.performSegue(withIdentifier: "toEnemySelectScreen", sender: self)
     }
     
+    @IBAction func fightButtonPress(_ sender: Any) {
+        self.performSegue(withIdentifier: "toGameViewController", sender: self)
+    }
     
 }

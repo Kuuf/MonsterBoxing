@@ -57,24 +57,28 @@ class PlayerSelectScreen: UIViewController {
     func puckCardRelease(){
         playerCard = UIImage(named: "Card_Puck.png")
         playerBoxer = deck.getFighter(name: "Puck")
+        deck.setPlayerBoxer(fighter: deck.getFighter(name: "Puck"))
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kragenCardRelease(){
         playerCard = UIImage(named: "Card_Kragen.png")
         playerBoxer = deck.getFighter(name: "Kragen")
+        deck.setPlayerBoxer(fighter: deck.getFighter(name: "Kragen"))
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func kuufnarCardRelease(){
         playerCard = UIImage(named: "Card_Kuufnar.png")
         playerBoxer = deck.getFighter(name: "Kuufnar")
+        deck.setPlayerBoxer(fighter: deck.getFighter(name: "Kuufnar"))
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
     
     func rahCardRelease(){
         playerCard = UIImage(named: "Card_Rah.png")
         playerBoxer = deck.getFighter(name: "Rah")
+        deck.setPlayerBoxer(fighter: deck.getFighter(name: "Rah"))
         self.performSegue(withIdentifier: "toPlayerConfirmScreen", sender: self)
     }
  

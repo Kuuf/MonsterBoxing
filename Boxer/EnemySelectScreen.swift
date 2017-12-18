@@ -71,12 +71,14 @@ class EnemySelectScreen: UIViewController {
     func puckCardRelease(){
         enemyCardImage = UIImage(named: "Card_Puck.png")
         playerBoxer = deck.getFighter(name: "Puck")
+        deck.setEnemyBoxer(fighter: deck.getFighter(name: "Puck"))
         self.performSegue(withIdentifier: "toEnemyConfirmScreen", sender: self)
     }
     
     func kragenCardRelease(){
         enemyCardImage = UIImage(named: "Card_Kragen.png")
         playerBoxer = deck.getFighter(name: "Kragen")
+        deck.setEnemyBoxer(fighter: deck.getFighter(name: "Kragen"))
         self.performSegue(withIdentifier: "toEnemyConfirmScreen", sender: self)
 
     }
@@ -84,6 +86,7 @@ class EnemySelectScreen: UIViewController {
     func kuufnarCardRelease(){
         enemyCardImage = UIImage(named: "Card_Kuufnar.png")
         playerBoxer = deck.getFighter(name: "Kuufnar")
+        deck.setEnemyBoxer(fighter: deck.getFighter(name: "Kuufnar"))
         self.performSegue(withIdentifier: "toEnemyConfirmScreen", sender: self)
 
     }
@@ -91,6 +94,7 @@ class EnemySelectScreen: UIViewController {
     func rahCardRelease(){
         enemyCardImage = UIImage(named: "Card_Rah.png")
         playerBoxer = deck.getFighter(name: "Rah")
+        deck.setEnemyBoxer(fighter: deck.getFighter(name: "Rah"))
         self.performSegue(withIdentifier: "toEnemyConfirmScreen", sender: self)
 
     }

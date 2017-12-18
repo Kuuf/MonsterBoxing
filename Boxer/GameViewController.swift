@@ -41,6 +41,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var opponentBlock: UIButton!
     @IBOutlet weak var resetOpponent: UIButton!
     @IBOutlet weak var resetPlayer: UIButton!
+    @IBOutlet weak var boxerSprite: UIImageView!
     
     var pressingLeft = Bool()
     var pressingRight = Bool()
@@ -68,6 +69,8 @@ class GameViewController: UIViewController {
     var playerStaminaAnimationBar = SKShapeNode()
     var potentialStaminaLost = Float()
     
+    
+    
     override func viewDidLoad() {
         canMove = true
         super.viewDidLoad()
@@ -91,6 +94,7 @@ class GameViewController: UIViewController {
             skView.presentScene(scene)
             Match = scene.Match
             Boxer = scene.Boxer
+            boxerSprite.image = UIImage(named: Boxer.getName()+"_Standing.png")
             Opponent = scene.Opponent
             playerHpBar = scene.playerHpBar
             opponentHpBar = scene.enemyHpBar
@@ -102,6 +106,7 @@ class GameViewController: UIViewController {
             coolDownTime = Float(50.0/Float(Boxer.getSpeed()))
             boxerMovementCooldownTime = coolDownTime/2
             punchCooldownTime = coolDownTime/2
+            
         }
         
         // registering different touches for leftKey
@@ -336,6 +341,9 @@ class GameViewController: UIViewController {
     }
     
     func punchRelease(sender: UIButton?){
+        //creating String that equals respective card and image name for punching stance sprite
+        boxerSprite.image = UIImage(named: Boxer.getName() + "_Punching.png")
+        
         potentialStaminaLost = 0
         holdingPunchKey = false
         //disables button for coolDownTime
@@ -348,6 +356,8 @@ class GameViewController: UIViewController {
             punchLength = 1
         }
         //does actual punching action
+        print("Player punching")
+        print("punchCooldownTime:", punchCooldownTime)
         damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: punchCooldownTime, punchLength: punchLength)
         staminaLost = Match.setStamina(attacker: Boxer, punchLength: punchLength)
         modifyUI(attacker: Boxer, defender: Opponent)
@@ -375,6 +385,9 @@ class GameViewController: UIViewController {
     }
     
     func enablePunchKey(){
+        //creating String that equals respective card and image name for normal stance sprite
+        boxerSprite.image = UIImage(named: Boxer.getName() + "_Standing.png")
+        
         self.punchKey.isEnabled = true
         Boxer.setStance(stance: "vulnerable")
         playerStance.text = Boxer.getStance()
@@ -432,29 +445,31 @@ class GameViewController: UIViewController {
         let previousPosition = playerStaminaAnimationBar.position.x
         playerStaminaAnimationBar.position.x = position
         if((previousPosition - position) < 0.0067){
-            print("BUG BUG BUG")
+            //print("BUG BUG BUG")
         }
        // print("Bar position change:", previousPosition - position)
     }
     
     //uses info returned from Fight.swift's Punch() method to change UI
     func modifyUI(attacker: Fighter, defender: Fighter){
-        //if the defender is the player
-        if(attacker.getName() != "Kuufnar"){
+        //if the opponent is attacking
+        if(attacker.getName() == Opponent.getName()){
             if(Boxer.getStance() != "blocking"){
                 // change Player HP bar
                 playerHpBar.position.x = CGFloat(Float(playerHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(playerHpBar.frame.width))
                 
                 // change Opponent stamina bar
             }
+        // if player is attacking
         }else{
             if(Opponent.getStance() != "blocking"){
                 // change Opponent HP bar
+                print("Opponent old hp position", opponentHpBar.position.x)
                 opponentHpBar.position.x = CGFloat(Float(opponentHpBar.position.x) - (damage/defender.getOriginalHp()) * Float(opponentHpBar.frame.width))
-                
+                print("New hp position", opponentHpBar.position.x)
+
                 // change Player stamina Bar
                 playerStaminaBar.position.x = CGFloat(Float(playerStaminaBar.position.x) - (staminaLost/attacker.getOriginalStamina()) * Float(playerStaminaBar.frame.width))
-                print("player stamina:", attacker.getStamina())
             }
         }
         //^^ modify the 4 according to the dimensions of the container for the hpbar

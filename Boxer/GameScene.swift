@@ -31,14 +31,16 @@ class GameScene: SKScene {
     var Match = Fight()
     var random = UInt32()
     var gameStarted = Bool()
+    var deck = Fighters()
 
     override func didMove(to view: SKView) {
         //set up scene here
         view.isMultipleTouchEnabled = true
         self.backgroundColor = SKColor.white
         
-        Boxer = Fighter(name: "Kuufnar", hp: 150, defense: 50, strength: 50, speed: 75, stamina: 75)
-        Opponent = Fighter(name: "Kragen", hp: 300, defense: 100, strength: 20, speed: 20, stamina: 50)
+        Boxer = deck.getPlayerBoxer()
+        print("player name:", Boxer.getName())
+        Opponent = deck.getEnemyBoxer()
         Match = Fight(player: Boxer, enemy: Opponent)
         
         enemyHpBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+30, y: (self.frame.height/2)-90, width: self.frame.width-60, height: 60))
