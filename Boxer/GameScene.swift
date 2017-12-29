@@ -19,7 +19,9 @@ class GameScene: SKScene {
     var enemyHpBar = SKShapeNode()
     var playerHpBar = SKShapeNode()
     var playerStaminaBar = SKShapeNode()
+    var playerStaminaBarNew = SKShapeNode()
     var playerStaminaAnimationBar = SKShapeNode()
+    var playerStaminaAnimationBarNew = SKShapeNode()
     var opponentStaminaBar = SKShapeNode()
     var aiPunchLength = Float()
     
@@ -51,22 +53,19 @@ class GameScene: SKScene {
         playerHpBar.fillColor = SKColor.green
         playerHpBar.zPosition = 9
         
-        playerStaminaBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+70, y: -(self.frame.height/2)+320, width: self.frame.width/3, height: 30))
+        playerStaminaBar = SKShapeNode(rect: CGRect(x: -(self.frame.width/2)+20, y: (-self.frame.height/2)+340, width: 30, height: self.frame.height/3))
         playerStaminaBar.fillColor = SKColor.red
         playerStaminaBar.zPosition = 9
         
-        playerStaminaAnimationBar = SKShapeNode(rect: CGRect(x: (-self.frame.width/2)+70, y: -(self.frame.height/2)+320, width: self.frame.width/3, height: 30))
+        playerStaminaAnimationBar = SKShapeNode(rect: CGRect(x: -(self.frame.width/2)+20, y: (-self.frame.height/2)+340, width: 30, height: self.frame.height/3))
         playerStaminaAnimationBar.fillColor = SKColor.cyan
         playerStaminaAnimationBar.zPosition = 10
-        playerStaminaAnimationBar.alpha = 0.5
-        
-        
         
         addChild(enemyHpBar)
         addChild(playerHpBar)
         addChild(playerStaminaBar)
         addChild(playerStaminaAnimationBar)
-       
+
        
     }
     
@@ -98,9 +97,9 @@ class GameScene: SKScene {
             if((self.Boxer.getStamina() < self.Boxer.getOriginalStamina()) && self.Boxer.getStance() != "punching"){
                 self.Boxer.setStamina(stamina: self.Boxer.getStamina()+0.05)
                 // animate true stamina bar
-                self.playerStaminaBar.position.x = CGFloat(Float(self.playerStaminaBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaBar.frame.width))
+                self.playerStaminaBar.position.y = CGFloat(Float(self.playerStaminaBar.position.y) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaBar.frame.height))
                 // animate stamina animation bar
-                self.viewController.setStaminaAnimationBarPosition(position: CGFloat(Float(self.playerStaminaAnimationBar.position.x) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width)))
+                self.viewController.setStaminaAnimationBarPosition(position: CGFloat(Float(self.playerStaminaAnimationBar.position.y) + (0.05/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.height)))
                 
             }
             if(self.Opponent.getStamina() != self.Opponent.getOriginalStamina()){

@@ -159,8 +159,8 @@ class GameViewController: UIViewController {
         playerStance.text = Boxer.getStance()
         Boxer.setHp(hp: Boxer.getOriginalHp())
         playerHpBar.position.x = 0
-        playerStaminaBar.position.x = 0
-        playerStaminaAnimationBar.position.x = 0
+        playerStaminaBar.position.y = 0
+        playerStaminaAnimationBar.position.y = 0
         Boxer.setStamina(stamina: Boxer.getOriginalStamina())
     }
     
@@ -368,10 +368,10 @@ class GameViewController: UIViewController {
         punchLength += 0.001
         potentialStaminaLost += 0.002
         
-        setStaminaAnimationBarPosition(position:  CGFloat(Float(self.playerStaminaBar.position.x) - (potentialStaminaLost/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.width)))
+        setStaminaAnimationBarPosition(position:  CGFloat(Float(self.playerStaminaBar.position.y) - (potentialStaminaLost/self.Boxer.getOriginalStamina()) * Float(self.playerStaminaAnimationBar.frame.height)))
         
         // potentialstaminalost > total stamina
-        if(0-playerStaminaAnimationBar.frame.width > playerStaminaAnimationBar.position.x){
+        if(0-playerStaminaAnimationBar.frame.height > playerStaminaAnimationBar.position.y){
             punchRelease(sender: nil)
         }
     }
@@ -438,8 +438,8 @@ class GameViewController: UIViewController {
     }
     
     func setStaminaAnimationBarPosition(position: CGFloat){
-        let previousPosition = playerStaminaAnimationBar.position.x
-        playerStaminaAnimationBar.position.x = position
+        let previousPosition = playerStaminaAnimationBar.position.y
+        playerStaminaAnimationBar.position.y = position
         if((previousPosition - position) < 0.0067){
             //print("BUG BUG BUG")
         }
@@ -465,7 +465,7 @@ class GameViewController: UIViewController {
                 print("New hp position", opponentHpBar.position.x)
 
                 // change Player stamina Bar
-                playerStaminaBar.position.x = CGFloat(Float(playerStaminaBar.position.x) - (staminaLost/attacker.getOriginalStamina()) * Float(playerStaminaBar.frame.width))
+                playerStaminaBar.position.y = CGFloat(Float(playerStaminaBar.position.y) - (staminaLost/attacker.getOriginalStamina()) * Float(playerStaminaBar.frame.height))
             }
         }
         //^^ modify the 4 according to the dimensions of the container for the hpbar
