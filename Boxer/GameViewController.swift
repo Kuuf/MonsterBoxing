@@ -66,6 +66,7 @@ class GameViewController: UIViewController {
     var workingMovementTime = Float() // used to prevent bug of arrows resetting cooldown when releaseKey methods are called by enablePunchKey
     var playerStaminaAnimationBar = SKShapeNode()
     var potentialStaminaLost = Float()
+    var justPunchedFromNoStamina = Bool()
     
     
     
@@ -337,30 +338,38 @@ class GameViewController: UIViewController {
     }
     
     func punchRelease(sender: UIButton?){
-        //creating String that equals respective card and image name for punching stance sprite
-        boxerSprite.image = UIImage(named: Boxer.getName() + "_Punching.png")
         
-        potentialStaminaLost = 0
-        holdingPunchKey = false
-        //disables button for coolDownTime
-        self.punchKey.isEnabled = false
-        punchTimer.invalidate()
-        Timer.scheduledTimer(timeInterval: TimeInterval(punchCooldownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
-        
-        // setting minimum punch strength for tapping button
-        if (punchLength < 1){
-            punchLength = 1
+        // justPunchedFromNoStamina accommodates for when the user releases the punch button after the boxer automatically punches
+        // after the potential stamina of a punch reaches to be greater than the remaining stamina
+        // this prevents a second punch from occuring after the automatic punch
+        if(justPunchedFromNoStamina == false){
+            //creating String that equals respective card and image name for punching stance sprite
+            boxerSprite.image = UIImage(named: Boxer.getName() + "_Punching.png")
+            
+            potentialStaminaLost = 0
+            holdingPunchKey = false
+            //disables button for coolDownTime
+            self.punchKey.isEnabled = false
+            punchTimer.invalidate()
+            Timer.scheduledTimer(timeInterval: TimeInterval(punchCooldownTime), target: self, selector: #selector(self.enablePunchKey), userInfo: nil, repeats: false)
+            
+            // setting minimum punch strength for tapping button
+            if (punchLength < 1){
+                punchLength = 1
+            }
+            //does actual punching action
+            print("Player punching")
+            print("punchCooldownTime:", punchCooldownTime)
+            damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: punchCooldownTime, punchLength: punchLength)
+            staminaLost = Match.setStamina(attacker: Boxer, punchLength: punchLength)
+            modifyUI(attacker: Boxer, defender: Opponent)
+            print("punch length:", punchLength)
+            
+            // resetting punch length
+            punchLength = 0
         }
-        //does actual punching action
-        print("Player punching")
-        print("punchCooldownTime:", punchCooldownTime)
-        damage = Match.punch(attacker: Boxer, defender: Opponent, isMonsterMove: false, coolDownTime: punchCooldownTime, punchLength: punchLength)
-        staminaLost = Match.setStamina(attacker: Boxer, punchLength: punchLength)
-        modifyUI(attacker: Boxer, defender: Opponent)
-        print("punch length:", punchLength)
-        
-        // resetting punch length
-        punchLength = 0
+        // resetting punchFromNoStamina
+        justPunchedFromNoStamina = false
     }
     
     // used to determine punch length and also animate the potential stamina lost from punch
@@ -373,7 +382,10 @@ class GameViewController: UIViewController {
         // potentialstaminalost > total stamina
         if(0-playerStaminaAnimationBar.frame.height > playerStaminaAnimationBar.position.y){
             punchRelease(sender: nil)
+            justPunchedFromNoStamina = true
+            print("PUNCH FROM NO STAMINA")
         }
+        
     }
 
     func setStanceText(text: String){
